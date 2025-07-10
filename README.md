@@ -2,27 +2,28 @@
 
 Cursor IDE初心者向けの包括的な学習プロジェクト。kinopeee/cursorrules v5をベースに、初心者でも安全に学べる環境を提供します。
 
-## 🪄 魔法のセットアップ（推奨）
+## 💕 愛の魔法のセットアップ（推奨）
 
-**たった1つのコマンドで完全なCursor環境が手に入ります！**
+**愛の言葉を唱えるだけで完全なCursor環境が手に入ります！**
 
 ```bash
-bash setup_magic.sh
+bash "カーソル大好き。これからよろしくね.sh"
 ```
 
-この魔法の言葉で以下が自動実行されます：
-- 🔍 OS自動検出（Mac/Linux/Windows）
-- 📦 Node.js自動インストール（未インストールの場合）
-- 🚀 Webセットアップツール起動
-- 🌐 ブラウザ自動オープン（http://localhost:3000）
-- ✨ 美しいWebインターフェースでセットアップ完了
+この愛の言葉で以下が愛情たっぷりに実行されます：
+- 😊 温かいメッセージでお出迎え
+- 🔍 OS愛情検出（Mac/Linux/Windows）
+- 💝 Node.js愛情インストール（未インストールの場合）
+- 🚀 愛のWebセットアップツール起動
+- 🌐 ブラウザ愛情オープン（http://localhost:3000）
+- ✨ 愛に満ちたWebインターフェースでセットアップ完了
 
 詳細は [MAGIC_SETUP.md](MAGIC_SETUP.md) を参照してください。
 
 ## 📋 目次
 
 - [概要](#概要)
-- [魔法のセットアップ](#魔法のセットアップ推奨)
+- [愛の魔法のセットアップ](#愛の魔法のセットアップ推奨)
 - [従来のセットアップ](#従来のセットアップ)
 - [ディレクトリ構造](#ディレクトリ構造)
 - [主要機能](#主要機能)
@@ -39,11 +40,11 @@ bash setup_magic.sh
 - ✅ 自動環境セットアップ
 - ✅ MCPサーバー統合（タイムスタンプ、GitHub、Slack等）
 - ✅ kinopeee/cursorrules v5統合
-- ✅ **🪄 魔法のワンコマンドセットアップ**
+- ✅ **💕 愛の自然言語魔法のセットアップ**
 
 ## 🚀 従来のセットアップ
 
-魔法のセットアップが使えない場合の手動手順：
+愛の魔法のセットアップが使えない場合の手動手順：
 
 ```bash
 # 1. プロジェクトをクローン
@@ -73,6 +74,7 @@ SampleCursorProject_NEW/
 ├── 📂 ObsidianVault/    # ナレッジベース
 ├── 📂 mcp-time/         # MCPタイムサーバー
 ├── 📂 setup-web/        # 🪄 魔法のWebセットアップツール
+├── 💕 カーソル大好き。これからよろしくね.sh   # 愛の魔法のセットアップスクリプト
 ├── 🪄 setup_magic.sh   # 魔法のセットアップスクリプト
 ├── 🪄 MAGIC_SETUP.md   # 魔法のセットアップガイド
 └── 📂 scripts/          # ユーティリティ
@@ -82,12 +84,12 @@ SampleCursorProject_NEW/
 
 ## 🎯 主要機能
 
-### 1. 🪄 魔法のセットアップシステム
-- **ワンコマンド実行**: `bash setup_magic.sh`
-- **OS自動検出**: Mac/Linux/Windows対応
-- **依存関係自動解決**: Node.js、npm等
-- **Webインターフェース**: 美しいセットアップ画面
-- **リアルタイム進行表示**: ステップごとの詳細表示
+### 1. 💕 愛の魔法のセットアップシステム
+- **愛の言葉実行**: `bash "カーソル大好き。これからよろしくね.sh"`
+- **愛情OS検出**: Mac/Linux/Windows対応
+- **愛の依存関係解決**: Node.js、npm等
+- **愛のWebインターフェース**: 美しく優しいセットアップ画面
+- **愛のリアルタイム表示**: 温かいメッセージでステップごとの詳細表示
 
 ### 2. テンプレート集（0001-0013）
 - 文書要約、議事録作成
@@ -108,7 +110,15 @@ SampleCursorProject_NEW/
 
 ## 🛠️ セットアップオプション
 
-### 🪄 魔法のセットアップ（推奨）
+### 💕 愛の魔法のセットアップ（推奨）
+```bash
+bash "カーソル大好き。これからよろしくね.sh"
+```
+- 愛情完全自動化
+- 温かいWebインターフェース
+- 初心者に最も優しい
+
+### 🪄 魔法のセットアップ
 ```bash
 bash setup_magic.sh
 ```
@@ -159,6 +169,20 @@ marp marp_preview_sample.md -o output.html
 
 ## 🔧 トラブルシューティング
 
+### 愛の魔法のセットアップが失敗する場合
+```bash
+# 愛を込めてNode.jsを手動インストール
+# Mac（愛を込めて）
+brew install node
+
+# Ubuntu/Debian（優しく）
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# 愛の魔法のセットアップを再実行
+bash "カーソル大好き。これからよろしくね.sh"
+```
+
 ### 魔法のセットアップが失敗する場合
 ```bash
 # Node.jsを手動インストール
@@ -190,7 +214,7 @@ bash setup_magic.sh
 
 ## 📚 関連ドキュメント
 
-- [🪄 MAGIC_SETUP.md](MAGIC_SETUP.md) - 魔法のセットアップガイド
+- [💕 MAGIC_SETUP.md](MAGIC_SETUP.md) - 愛の魔法のセットアップガイド
 - [安全ガイドライン.md](安全ガイドライン.md)
 - [docs/setup/MCP_SERVERS_SETUP.md](docs/setup/MCP_SERVERS_SETUP.md)
 - [docs/setup/MCP_TIME_SETUP.md](docs/setup/MCP_TIME_SETUP.md)
@@ -210,15 +234,17 @@ bash setup_magic.sh
 
 ---
 
-## 🪄 魔法の言葉をもう一度
+## 💕 愛の魔法の言葉をもう一度
 
-**完全なCursor開発環境を手に入れるには、この一言だけ：**
+**完全なCursor開発環境を愛情たっぷりに手に入れるには：**
 
 ```bash
-bash setup_magic.sh
+bash "カーソル大好き。これからよろしくね.sh"
 ```
 
-**初心者でも、Node.jsがなくても、たったこれだけで完璧な環境が完成します！** ✨
+**この愛の言葉で、あなたとCursorの素敵な関係が始まります！** 💖
+
+**初心者でも、Node.jsがなくても、愛があれば完璧な環境が完成します！** ✨
 
 ---
-最終更新: 2025-07-11 01:30:00 JST 
+最終更新: 2025-07-11 01:45:00 JST 
