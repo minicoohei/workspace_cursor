@@ -1,21 +1,21 @@
 {
-  "name": "sample-cursor-project-new",
-  "version": "2.0.0",
-  "description": "Cursor初心者向け学習プロジェクト",
-  "main": "index.js",
+  "name": "cursor-setup-tool",
+  "version": "1.0.0",
+  "description": "Cursor環境セットアップツール - CursorRules自動起動対応",
+  "main": "setup-web/server.js",
   "scripts": {
-    "setup": "bash setup.sh",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node setup-web/server.js",
+    "dev": "nodemon setup-web/server.js",
+    "setup": "bash setup_magic.sh",
+    "magic": "bash setup_magic.sh"
   },
-  "keywords": [
-    "cursor",
-    "learning",
-    "japanese",
-    "beginner"
-  ],
-  "author": "",
-  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
   "devDependencies": {
-    "prettier": "^3.0.0"
-  }
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["cursor", "setup", "development", "cursorrules", "automation"],
+  "author": "Cursor User",
+  "license": "MIT"
 }

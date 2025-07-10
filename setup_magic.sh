@@ -1,22 +1,29 @@
 #!/bin/bash
 
-# 🪄 SampleCursorProject_NEW - 魔法のセットアップスクリプト
-# Cursorに貼り付けるだけで完全自動セットアップが開始されます
+# 🎯 SampleCursorProject_NEW - 魔法のセットアップスクリプト
+# CursorRulesから自動起動対応
 
-echo "✨ =================================================="
-echo "🪄 SampleCursorProject_NEW 魔法のセットアップ開始！"
-echo "✨ =================================================="
+echo "🎯 =================================================="
+echo "✨ Cursor環境セットアップを開始します"
+echo "🚀 魔法のように環境を構築中..."
+echo "🎯 =================================================="
+echo ""
+
+# 開始メッセージ
+echo "😊 こんにちは！Cursor環境のセットアップを開始しますね"
+echo "🔧 一緒に開発環境を整えましょう！"
 echo ""
 
 # プロジェクトディレクトリの確認
 if [ ! -f "setup_complete_environment.sh" ]; then
-    echo "❌ エラー: プロジェクトディレクトリが正しくありません"
+    echo "❌ プロジェクトディレクトリが見つかりません"
     echo "📁 正しいプロジェクトディレクトリで実行してください"
+    echo "💡 ヒント: GitHubからクローンしたディレクトリで実行してください"
     exit 1
 fi
 
 echo "📍 現在のディレクトリ: $(pwd)"
-echo "🎯 魔法のセットアップを開始します..."
+echo "🎯 セットアップを開始します..."
 echo ""
 
 # OSの検出
@@ -31,23 +38,26 @@ elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
     OS_TYPE="windows"
     echo "🪟 Windows環境を検出しました"
 else
-    echo "⚠️  未知のOS環境です。Macとして処理を続行します..."
+    echo "⚠️  未知のOS環境です。Macとして処理を続行します"
     OS_TYPE="mac"
 fi
 
 echo ""
 
-# Node.jsの確認とインストール
+# Node.jsの確認
 echo "🔍 Node.js環境をチェック中..."
 
 if ! command -v node &> /dev/null; then
-    echo "📦 Node.jsがインストールされていません。自動インストールを開始..."
+    echo "📦 Node.jsがインストールされていません"
+    echo "🔧 自動インストールを開始します"
+    echo ""
     
     case $OS_TYPE in
         "mac")
-            echo "🍺 Homebrewを使用してNode.jsをインストールします..."
+            echo "🍺 Homebrewを使用してNode.jsをインストールします"
             if ! command -v brew &> /dev/null; then
                 echo "📥 Homebrewをインストール中..."
+                echo "⏳ 少し時間がかかる場合があります"
                 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
                 
                 # Homebrewのパスを追加
@@ -56,78 +66,84 @@ if ! command -v node &> /dev/null; then
                 elif [[ -f "/usr/local/bin/brew" ]]; then
                     eval "$(/usr/local/bin/brew shellenv)"
                 fi
+                echo "✅ Homebrewのインストール完了"
             fi
             
-            echo "🟢 Node.jsをインストール中..."
+            echo "🚀 Node.jsをインストール中..."
             brew install node
             ;;
             
         "linux")
-            echo "📦 Node.jsをインストール中..."
+            echo "🐧 LinuxパッケージマネージャーでNode.jsをインストールします"
             if command -v apt &> /dev/null; then
-                # Ubuntu/Debian
+                echo "📦 Ubuntu/Debian用パッケージを使用"
                 curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
                 sudo apt-get install -y nodejs
             elif command -v yum &> /dev/null; then
-                # CentOS/RHEL
+                echo "📦 CentOS/RHEL用パッケージを使用"
                 curl -fsSL https://rpm.nodesource.com/setup_lts.x | sudo bash -
                 sudo yum install -y nodejs npm
             else
                 echo "❌ パッケージマネージャーが見つかりません"
-                echo "📝 手動でNode.jsをインストールしてください: https://nodejs.org/"
+                echo "💡 手動でNode.jsをインストールしてください: https://nodejs.org/"
+                echo "🔄 インストール後、このスクリプトを再実行してください"
                 exit 1
             fi
             ;;
             
         "windows")
-            echo "🪟 WindowsでのNode.jsインストール手順:"
-            echo "1. https://nodejs.org/ にアクセス"
-            echo "2. LTS版をダウンロードしてインストール"
-            echo "3. PowerShellを再起動"
-            echo "4. このスクリプトを再実行"
+            echo "🪟 Windowsでのインストール手順:"
             echo ""
-            echo "💡 または、Chocolateyを使用:"
+            echo "📝 以下の手順でNode.jsをインストールしてください:"
+            echo "   1️⃣ https://nodejs.org/ にアクセス"
+            echo "   2️⃣ LTS版をダウンロード"
+            echo "   3️⃣ ダウンロードしたファイルを実行"
+            echo "   4️⃣ PowerShellを再起動"
+            echo "   5️⃣ このスクリプトを再実行"
+            echo ""
+            echo "🍫 Chocolateyがある場合:"
             echo "   choco install nodejs"
             echo ""
             read -p "Node.jsをインストールしましたか？ (y/N): " -n 1 -r
             echo ""
             if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-                echo "❌ Node.jsのインストール後に再実行してください"
+                echo "💡 Node.jsをインストール後、再度実行してください"
                 exit 1
             fi
             ;;
     esac
 else
     NODE_VERSION=$(node --version)
-    echo "✅ Node.js が既にインストールされています: $NODE_VERSION"
+    echo "✅ Node.js $NODE_VERSION が既にインストール済みです"
 fi
 
 # Node.jsの再確認
 if ! command -v node &> /dev/null; then
     echo "❌ Node.jsのインストールに失敗しました"
-    echo "📝 手動でインストールしてください: https://nodejs.org/"
+    echo "💡 手動でインストールしてください: https://nodejs.org/"
+    echo "🔄 インストール後、再度このスクリプトを実行してください"
     exit 1
 fi
 
 # npmの確認
 if ! command -v npm &> /dev/null; then
     echo "❌ npmが見つかりません"
-    echo "📝 Node.jsを再インストールしてください"
+    echo "🔄 Node.jsを再インストールしてください"
     exit 1
 fi
 
 NPM_VERSION=$(npm --version)
-echo "✅ npm が利用可能です: $NPM_VERSION"
+echo "✅ npm $NPM_VERSION が利用可能です"
 echo ""
 
 # package.jsonの自動生成
 if [ ! -f "package.json" ]; then
-    echo "📦 package.jsonを自動生成中..."
+    echo "📦 package.jsonを生成中..."
     cat > package.json << 'EOF'
 {
-  "name": "samplecursorproject-setup",
+  "name": "cursor-setup-tool",
   "version": "1.0.0",
-  "description": "SampleCursorProject_NEW 魔法のセットアップツール",
+  "description": "Cursor環境セットアップツール",
   "main": "setup-web/server.js",
   "scripts": {
     "start": "node setup-web/server.js",
@@ -141,8 +157,8 @@ if [ ! -f "package.json" ]; then
   "devDependencies": {
     "nodemon": "^3.0.1"
   },
-  "keywords": ["cursor", "setup", "development", "magic"],
-  "author": "SampleCursorProject_NEW",
+  "keywords": ["cursor", "setup", "development"],
+  "author": "Cursor User",
   "license": "MIT"
 }
 EOF
@@ -154,30 +170,32 @@ fi
 echo ""
 
 # 依存関係のインストール
-echo "📦 依存関係をインストール中..."
+echo "📦 必要なパッケージをインストール中..."
+
 npm install --silent
 
 if [ $? -ne 0 ]; then
-    echo "❌ npm installに失敗しました"
-    echo "🔄 再試行中..."
+    echo "⚠️  インストールに時間がかかっています。再試行中..."
     npm install
     
     if [ $? -ne 0 ]; then
-        echo "❌ 依存関係のインストールに失敗しました"
-        echo "🛠️  手動で実行してください: npm install"
+        echo "❌ パッケージのインストールに失敗しました"
+        echo "💡 手動で実行してください: npm install"
+        echo "🤝 問題が解決しない場合は、ドキュメントを確認してください"
         exit 1
     fi
 fi
 
-echo "✅ 依存関係のインストール完了"
+echo "✅ パッケージのインストール完了"
 echo ""
 
-# ポートチェックと既存プロセス終了
+# ポートチェック
 echo "🔍 ポート3000をチェック中..."
 if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then
-    echo "🔄 ポート3000で実行中のプロセスを終了します..."
+    echo "🔄 ポート3000で実行中のプロセスを終了します"
     pkill -f "node setup-web/server.js" 2>/dev/null || true
     sleep 2
+    echo "✅ ポート3000が利用可能になりました"
 fi
 
 # サーバーファイルの確認
@@ -188,17 +206,25 @@ fi
 
 echo ""
 echo "🚀 =================================================="
-echo "✨ 魔法のWebセットアップツールを起動中..."
-echo "🌐 URL: http://localhost:3000"
+echo "🌐 Webセットアップツールを起動中..."
+echo "🔗 URL: http://localhost:3000"
 echo "🚀 =================================================="
 echo ""
-echo "💡 ブラウザが自動で開かない場合は、手動で以下にアクセス:"
+echo "💡 ブラウザが自動で開かない場合は、手動でアクセスしてください:"
 echo "   👉 http://localhost:3000"
 echo ""
-echo "🛑 停止するには Ctrl+C を押してください"
+echo "🛑 終了するには Ctrl+C を押してください"
 echo ""
 
-# ブラウザを自動で開く
+# 完了メッセージ
+echo "🎊 =========================================="
+echo "✨ Cursorセットアップツールの準備完了！"
+echo "🌟 これから快適な開発環境をお楽しみください"
+echo "🤝 何か問題があれば、いつでもこのスクリプトを実行してください"
+echo "🎊 =========================================="
+echo ""
+
+# ブラウザを開く
 sleep 2
 case $OS_TYPE in
     "mac")
@@ -216,10 +242,15 @@ case $OS_TYPE in
         ;;
 esac
 
-# Node.jsサーバーを起動
+# サーバーを起動
+echo "🚀 サーバーを起動します..."
+echo "🎯 Cursor環境セットアップをお楽しみください"
+
 node setup-web/server.js
 
 # 終了処理
 echo ""
-echo "🛑 魔法のセットアップツールを停止しました"
-echo "✨ ありがとうございました！" 
+echo "👋 お疲れさまでした！"
+echo "🎯 またいつでもこのスクリプトを実行してください"
+echo "🌟 良い開発ライフをお過ごしください！"
+echo "🤝 ありがとうございました" 

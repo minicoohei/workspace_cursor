@@ -1,250 +1,176 @@
 # 🎯 SampleCursorProject_NEW
 
-Cursor IDE初心者向けの包括的な学習プロジェクト。kinopeee/cursorrules v5をベースに、初心者でも安全に学べる環境を提供します。
+Cursor初心者向けの包括的な学習・セットアップ環境
 
-## 💕 愛の魔法のセットアップ（推奨）
+## 🚀 クイックスタート - CursorRules自動起動
 
-**愛の言葉を唱えるだけで完全なCursor環境が手に入ります！**
+### ✨ 魔法のワード（推奨）
+Cursorで以下のいずれかの言葉を含むメッセージを送信するだけで、自動的にセットアップが開始されます：
+
+```
+「セットアップお願いします」
+「環境構築したい」  
+「カーソル大好き」
+「始めたい」
+```
+
+**🎯 自動実行フロー:**
+1. トリガーワード検知 → `setup_magic.sh`自動実行
+2. Node.js環境自動構築 → Webサーバー起動
+3. ブラウザ自動オープン → Web経由でセットアップ完了
+
+### 🛠️ 手動実行（従来方式）
 
 ```bash
-bash "カーソル大好き。これからよろしくね.sh"
-```
-
-この愛の言葉で以下が愛情たっぷりに実行されます：
-- 😊 温かいメッセージでお出迎え
-- 🔍 OS愛情検出（Mac/Linux/Windows）
-- 💝 Node.js愛情インストール（未インストールの場合）
-- 🚀 愛のWebセットアップツール起動
-- 🌐 ブラウザ愛情オープン（http://localhost:3000）
-- ✨ 愛に満ちたWebインターフェースでセットアップ完了
-
-詳細は [MAGIC_SETUP.md](MAGIC_SETUP.md) を参照してください。
-
-## 📋 目次
-
-- [概要](#概要)
-- [愛の魔法のセットアップ](#愛の魔法のセットアップ推奨)
-- [従来のセットアップ](#従来のセットアップ)
-- [ディレクトリ構造](#ディレクトリ構造)
-- [主要機能](#主要機能)
-- [使い方](#使い方)
-- [トラブルシューティング](#トラブルシューティング)
-
-## 🌟 概要
-
-このプロジェクトは、Cursor IDEを使った開発を段階的に学べる教材です。
-
-### 特徴
-- ✅ 初心者向け安全設計（危険コマンドの警告）
-- ✅ 13種類の実践的テンプレート
-- ✅ 自動環境セットアップ
-- ✅ MCPサーバー統合（タイムスタンプ、GitHub、Slack等）
-- ✅ kinopeee/cursorrules v5統合
-- ✅ **💕 愛の自然言語魔法のセットアップ**
-
-## 🚀 従来のセットアップ
-
-愛の魔法のセットアップが使えない場合の手動手順：
-
-```bash
-# 1. プロジェクトをクローン
-git clone https://github.com/minicoohei/workspace_cursor.git
-cd workspace_cursor
-
-# 2. 完全環境セットアップを実行
-bash setup_complete_environment.sh
-
-# 3. 環境変数を設定
-cp config/env.local.template .env.local
-# .env.localを編集してAPIキーを設定
-
-# 4. Cursorを再起動
-```
-
-## 📁 ディレクトリ構造
-
-```
-SampleCursorProject_NEW/
-├── 📂 .cursor/          # Cursor IDE設定
-├── 📂 .vscode/          # エディタ設定
-├── 📂 config/           # 各種設定ファイル
-├── 📂 docs/             # ドキュメント
-├── 📂 samples/          # サンプルファイル
-├── 📂 CursorCourse/     # 学習コンテンツ
-├── 📂 ObsidianVault/    # ナレッジベース
-├── 📂 mcp-time/         # MCPタイムサーバー
-├── 📂 setup-web/        # 🪄 魔法のWebセットアップツール
-├── 💕 カーソル大好き。これからよろしくね.sh   # 愛の魔法のセットアップスクリプト
-├── 🪄 setup_magic.sh   # 魔法のセットアップスクリプト
-├── 🪄 MAGIC_SETUP.md   # 魔法のセットアップガイド
-└── 📂 scripts/          # ユーティリティ
-```
-
-詳細は[directorystructure.md](directorystructure.md)を参照してください。
-
-## 🎯 主要機能
-
-### 1. 💕 愛の魔法のセットアップシステム
-- **愛の言葉実行**: `bash "カーソル大好き。これからよろしくね.sh"`
-- **愛情OS検出**: Mac/Linux/Windows対応
-- **愛の依存関係解決**: Node.js、npm等
-- **愛のWebインターフェース**: 美しく優しいセットアップ画面
-- **愛のリアルタイム表示**: 温かいメッセージでステップごとの詳細表示
-
-### 2. テンプレート集（0001-0013）
-- 文書要約、議事録作成
-- Marpスライド作成
-- 要件定義、ガントチャート
-- グラフィックレコーディング
-
-### 3. MCPサーバー統合
-- **mcp-time**: タイムスタンプ自動記載
-- **filesystem**: ファイル操作
-- **github**: GitHub連携
-- **figma**: Figmaデザイン連携
-
-### 4. 安全機能
-- 危険コマンドの検出と警告
-- 初心者向けエラーメッセージ
-- セキュリティチェック機能
-
-## 🛠️ セットアップオプション
-
-### 💕 愛の魔法のセットアップ（推奨）
-```bash
-bash "カーソル大好き。これからよろしくね.sh"
-```
-- 愛情完全自動化
-- 温かいWebインターフェース
-- 初心者に最も優しい
-
-### 🪄 魔法のセットアップ
-```bash
+# 直接実行
 bash setup_magic.sh
-```
-- 完全自動化
-- Webインターフェース
-- 初心者に最適
 
-### ⚡ 基本セットアップ
+# npm経由
+npm run setup
+npm run magic
+```
+
+## 🎯 特徴
+
+- **🤖 自然言語トリガー**: CursorRulesによる自動起動
+- **🔧 完全自動化**: OS検知、Node.js自動インストール、依存関係解決
+- **🌐 Webインターフェース**: ブラウザで直感的にセットアップ
+- **📚 学習コンテンツ**: Cursor使い方からMarp、Jupyter環境まで
+- **🛡️ 安全性重視**: 初心者向け安全ガイドライン内蔵
+- **📱 クロスプラットフォーム**: Mac/Linux/Windows対応
+
+## 📁 プロジェクト構成
+
+```
+work_space/
+├── setup_magic.sh          # 🎯 メインセットアップスクリプト
+├── .cursorrules            # 🤖 自動起動ルール定義
+├── setup-web/              # 🌐 Webセットアップツール
+├── CursorCourse/           # 📚 Cursor学習コンテンツ
+├── ObsidianVault/          # 📝 ドキュメントテンプレート集
+├── mcp-time/               # ⏰ MCPタイムサーバー
+└── docs/                   # 📖 セットアップガイド
+```
+
+## 🌟 主要機能
+
+### 🤖 CursorRules自動起動
+- **トリガーワード検知**: 自然言語での自動セットアップ開始
+- **ワンストップ実行**: 1つのスクリプトで完全環境構築
+- **バックグラウンド処理**: サーバー自動起動とブラウザ連携
+
+### 📖 学習コンテンツ
+- **Chapter1**: ドキュメント作成（Marp、議事録、要件定義）
+- **Chapter2**: ライブコーディング環境
+- **Templates**: 再利用可能なテンプレート集
+
+### 🛠️ 開発環境
+- **Cursor IDE**: 最適化された設定
+- **Marp**: プレゼンテーション作成
+- **Jupyter**: データ分析環境
+- **MCP Servers**: 時間管理、ファイル操作、GitHub連携
+
+### 🌐 Webツール
+- ブラウザベースのセットアップインターフェース
+- リアルタイム進行状況表示
+- 対話的な環境構築
+
+## 🔧 技術仕様
+
+- **CursorRules**: 自然言語トリガー機能
+- **Node.js**: サーバーサイド実行環境
+- **Express**: Webサーバーフレームワーク
+- **MCP Protocol**: Model Context Protocol対応
+- **Multi-OS**: Mac/Linux/Windows対応
+
+## 📋 使用例
+
+### 自動起動の例
+```
+ユーザー: 「Cursorの環境構築をお願いします」
+↓
+🎯 魔法のワードを検知しました！
+✨ Cursor環境セットアップを自動で開始します...
+🚀 setup_magic.shを実行中...
+🌐 ブラウザで http://localhost:3000 が開きます
+```
+
+### 手動実行の例
 ```bash
-bash setup_cursor_environment.sh
-```
-- Cursor設定のみ
-- 高速セットアップ
+# シンプルな実行
+bash setup_magic.sh
 
-### 🔧 完全セットアップ
-```bash
-bash setup_complete_environment.sh
-```
-- 全機能インストール
-- 上級者向け
-
-### 🌐 Webセットアップツール
-```bash
-bash start-setup-web.sh
-```
-- Webインターフェースのみ起動
-- ブラウザで http://localhost:3000
-
-## 📖 使い方
-
-### テンプレートの使用
-```
-@0001  # 文書要約テンプレートを参照
-@0004  # Marpスライドテンプレートを参照
+# npm経由（同じ結果）
+npm run setup
 ```
 
-### MCPタイムサーバーの起動
-```bash
-cd mcp-time
-docker-compose up -d
-```
+## 📚 ドキュメント
 
-### Marpスライドの作成
-```bash
-cd samples/marp
-marp marp_preview_sample.md -o output.html
-```
+- [魔法のセットアップガイド](MAGIC_SETUP.md) - CursorRules自動起動詳細
+- [セットアップガイド](docs/setup/) - 従来の手動セットアップ
+- [安全ガイドライン](安全ガイドライン.md) - 初心者向け安全対策
+- [テンプレート一覧](ObsidianVault/Templates/README_テンプレート一覧.md) - 利用可能テンプレート
 
 ## 🔧 トラブルシューティング
 
-### 愛の魔法のセットアップが失敗する場合
+### 自動起動しない場合
+1. `.cursorrules`ファイルの確認
+2. Cursor再起動でルール再読み込み
+3. 手動実行で動作確認
+
+### 一般的な問題
 ```bash
-# 愛を込めてNode.jsを手動インストール
-# Mac（愛を込めて）
-brew install node
+# Node.jsエラー → 手動インストール
+https://nodejs.org/
 
-# Ubuntu/Debian（優しく）
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt-get install -y nodejs
+# ポートエラー → プロセス終了
+pkill -f "node setup-web/server.js"
 
-# 愛の魔法のセットアップを再実行
-bash "カーソル大好き。これからよろしくね.sh"
+# 権限エラー → 実行権限付与
+chmod +x setup_magic.sh
 ```
 
-### 魔法のセットアップが失敗する場合
+## 🤝 サポート
+
+問題が発生した場合は、以下のいずれかの方法でサポートを受けられます：
+
+**自動起動（推奨）:**
+```
+「セットアップで困っています」
+「魔法が効かない」
+```
+
+**手動実行:**
 ```bash
-# Node.jsを手動インストール
-# Mac
-brew install node
-
-# Ubuntu/Debian
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# 魔法のセットアップを再実行
 bash setup_magic.sh
 ```
 
-### Cursorが設定を認識しない
-1. Cursorを完全に終了
-2. `~/.cursor/` ディレクトリを確認
-3. Cursorを再起動
+## 💡 活用のコツ
 
-### MCPサーバーが動作しない
-1. Docker Desktopが起動しているか確認
-2. ポート5000が使用されていないか確認
-3. `docker-compose logs`でエラーを確認
+### 効果的なトリガーワード
+- **「始めたい」** - 最もシンプル
+- **「カーソル大好き」** - 愛情表現付き  
+- **「環境構築お願いします」** - 丁寧なリクエスト
 
-### APIキーエラー
-1. `.env.local`ファイルを確認
-2. 環境変数名が正しいか確認
-3. APIキーの有効性を確認
-
-## 📚 関連ドキュメント
-
-- [💕 MAGIC_SETUP.md](MAGIC_SETUP.md) - 愛の魔法のセットアップガイド
-- [安全ガイドライン.md](安全ガイドライン.md)
-- [docs/setup/MCP_SERVERS_SETUP.md](docs/setup/MCP_SERVERS_SETUP.md)
-- [docs/setup/MCP_TIME_SETUP.md](docs/setup/MCP_TIME_SETUP.md)
-
-## 🤝 貢献
-
-プルリクエストを歓迎します！
-1. このリポジトリをフォーク
-2. 機能ブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'Add amazing feature'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
-5. プルリクエストを作成
+### ワークフロー最適化
+1. **初回**: トリガーワードで自動セットアップ
+2. **日常**: `npm run setup`で高速起動
+3. **開発**: `npm run dev`でホットリロード
 
 ## 📄 ライセンス
 
-このプロジェクトはMITライセンスの下で公開されています。
+MIT License
 
 ---
 
-## 💕 愛の魔法の言葉をもう一度
+## 🎊 まとめ
 
-**完全なCursor開発環境を愛情たっぷりに手に入れるには：**
+**1つのスクリプト**`setup_magic.sh`で：
+- ✅ CursorRulesからの自動起動
+- ✅ Node.jsサーバー立ち上げ  
+- ✅ Web経由でのセットアップ完了
 
-```bash
-bash "カーソル大好き。これからよろしくね.sh"
-```
-
-**この愛の言葉で、あなたとCursorの素敵な関係が始まります！** 💖
-
-**初心者でも、Node.jsがなくても、愛があれば完璧な環境が完成します！** ✨
+理想的なワークフローが完成しました！🎯
 
 ---
-最終更新: 2025-07-11 01:45:00 JST 
+最終更新: 2025-01-28 15:55:00 JST 
