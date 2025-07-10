@@ -1,11 +1,67 @@
 {
   "mcpServers": {
     "mcp-time": {
-      "command": "docker",
-      "args": ["compose", "-f", "mcp-time/docker-compose.yml", "up"],
+      "command": "bash",
+      "args": ["scripts/start-mcp-time.sh"],
       "env": {},
-      "description": "日本時間のタイムスタンプを提供するMCPサーバー",
+      "description": "日本時間のタイムスタンプを提供するMCPサーバー（Docker/Python自動選択）",
       "autoStart": true
+    },
+    "mcp-time-python": {
+      "command": "bash",
+      "args": ["scripts/start-mcp-time-python.sh"],
+      "env": {},
+      "description": "日本時間のタイムスタンプを提供するMCPサーバー（Python直接実行）",
+      "autoStart": false
+    },
+    "cursor-notebook": {
+      "command": "npx",
+      "args": ["cursor-notebook-mcp"],
+      "env": {},
+      "description": "Jupyter Notebookの実行とデータ分析をサポートするMCPサーバー",
+      "autoStart": false
+    },
+    "github": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github_token}"
+      },
+      "description": "GitHub公式MCP Server（リポジトリ、Issue、PR管理）",
+      "autoStart": false
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"],
+      "env": {},
+      "description": "Playwrightによるブラウザ自動化とWebスクレイピングを提供するMCPサーバー",
+      "autoStart": false
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}"
+      ],
+      "env": {},
+      "description": "ファイルシステム操作（読み書き、ディレクトリ管理、検索）を提供するMCPサーバー",
+      "autoStart": false
     }
-  }
+  },
+  "inputs": [
+    {
+      "id": "github_token",
+      "type": "promptString",
+      "description": "GitHub Personal Access Token",
+      "password": true
+    }
+  ]
 } 
