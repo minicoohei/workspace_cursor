@@ -31,7 +31,7 @@ const setupGuides = {
             {
                 title: 'プロジェクトディレクトリに移動',
                 description: 'プロジェクトフォルダに移動します。',
-                code: 'cd ~/Documents/WorkSpace/SampleCursorProject_NEW'
+                code: 'cd ~/Documents/WorkSpace/work_space'
             },
             {
                 title: '完全環境セットアップを実行',
@@ -65,7 +65,7 @@ const setupGuides = {
             {
                 title: 'プロジェクトディレクトリに移動',
                 description: 'WSL内でプロジェクトフォルダに移動します。',
-                code: 'cd /mnt/c/Users/YourName/Documents/SampleCursorProject_NEW'
+                code: 'cd /mnt/c/Users/YourName/Documents/work_space'
             },
             {
                 title: '完全環境セットアップを実行',
@@ -94,7 +94,7 @@ const setupGuides = {
             {
                 title: 'プロジェクトディレクトリに移動',
                 description: 'プロジェクトフォルダに移動します。',
-                code: 'cd ~/Documents/SampleCursorProject_NEW'
+                code: 'cd ~/Documents/work_space'
             },
             {
                 title: '完全環境セットアップを実行',
@@ -156,76 +156,152 @@ function startSetup(type) {
     stepsHtml += '</div>';
     progressSteps.innerHTML = stepsHtml;
     
-    // セットアップのシミュレーション
-    simulateSetup(type, steps);
+    // 実際のセットアップを実行
+    executeSetup(type, steps);
 }
 
-// セットアップのシミュレーション
-async function simulateSetup(type, steps) {
+// 実際のセットアップを実行
+async function executeSetup(type, steps) {
     const scriptName = type === 'complete' ? 'setup_complete_environment.sh' : 'setup_cursor_environment.sh';
     
     terminalContent.textContent = `🚀 ${scriptName} を実行中...\n\n`;
     
-    for (let i = 0; i < steps.length; i++) {
-        const step = steps[i];
-        const stepElement = document.getElementById(`step-${step.id}`);
+    try {
+        // サーバーが実行中かチェック
+        const serverCheck = await fetch('/api/health').catch(() => null);
         
-        // 現在のステップをハイライト
-        stepElement.querySelector('.step-icon').textContent = '🔄';
-        stepElement.classList.add('active');
+        if (!serverCheck) {
+            // サーバーが起動していない場合の処理
+            terminalContent.textContent += '❌ セットアップサーバーが起動していません。\n';
+            terminalContent.textContent += '手動でセットアップを実行してください:\n\n';
+            terminalContent.textContent += `bash ${scriptName}\n\n`;
+            terminalContent.textContent += '詳細な手順は下記の「手動セットアップ」を参照してください。\n';
+            
+            // 手動セットアップガイドを表示
+            showManualSetupWarning();
+            return;
+        }
         
-        // プログレスバーを更新
-        progressFill.style.width = `${step.progress}%`;
-        progressText.textContent = `${step.name} (${step.progress}%)`;
+        // スクリプト実行リクエスト
+        const response = await fetch('/api/execute-setup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                script: scriptName,
+                type: type
+            })
+        });
         
-        // ターミナル出力を追加
-        terminalContent.textContent += getStepOutput(type, step.id);
-        terminalSection.scrollTop = terminalSection.scrollHeight;
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         
-        // 待機（実際のセットアップをシミュレート）
-        await sleep(1500 + Math.random() * 1000);
+        // ストリーミングレスポンスを処理
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let currentStepIndex = 0;
         
-        // ステップ完了
-        stepElement.querySelector('.step-icon').textContent = '✅';
-        stepElement.classList.remove('active');
-        stepElement.classList.add('completed');
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            
+            const chunk = decoder.decode(value);
+            const lines = chunk.split('\n');
+            
+            for (const line of lines) {
+                if (line.trim()) {
+                    try {
+                        const data = JSON.parse(line);
+                        handleSetupProgress(data, steps, currentStepIndex);
+                        
+                        if (data.type === 'step_complete') {
+                            currentStepIndex++;
+                        }
+                    } catch (e) {
+                        // 通常のテキスト出力として処理
+                        terminalContent.textContent += line + '\n';
+                        terminalSection.scrollTop = terminalSection.scrollHeight;
+                    }
+                }
+            }
+        }
+        
+        // セットアップ完了
+        terminalContent.textContent += '\n🎉 セットアップが完了しました！\n';
+        progressText.textContent = '完了！環境構築に成功しました 🎉';
+        
+        // 次のステップを表示
+        nextStepsSection.classList.remove('hidden');
+        nextStepsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+    } catch (error) {
+        console.error('セットアップエラー:', error);
+        terminalContent.textContent += `\n❌ エラーが発生しました: ${error.message}\n`;
+        terminalContent.textContent += '\n手動でセットアップを実行してください:\n';
+        terminalContent.textContent += `bash ${scriptName}\n\n`;
+        
+        showManualSetupWarning();
+    } finally {
+        // ボタンを再度有効化
+        completeSetupBtn.disabled = false;
+        basicSetupBtn.disabled = false;
     }
-    
-    // セットアップ完了
-    terminalContent.textContent += '\n🎉 セットアップが完了しました！\n';
-    progressText.textContent = '完了！環境構築に成功しました 🎉';
-    
-    // 次のステップを表示
-    nextStepsSection.classList.remove('hidden');
-    nextStepsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    
-    // ボタンを再度有効化
-    completeSetupBtn.disabled = false;
-    basicSetupBtn.disabled = false;
 }
 
-// ステップごとの出力を生成
-function getStepOutput(type, stepId) {
-    const outputs = {
-        complete: {
-            basic: '📦 基本Cursor環境をセットアップ中...\n✅ Indexing Docs設定完了\n✅ MCPサーバー設定完了\n✅ Project Rules適用完了\n\n',
-            vscode: '🔧 VSCode拡張機能をインストール中...\n  - Marp for VS Code\n  - Markdown All in One\n  - Japanese Language Pack\n  - GitLens\n  - Python\n  - Jupyter\n✅ 拡張機能のインストール完了\n\n',
-            marp: '📊 Marp CLIをインストール中...\n✅ @marp-team/marp-cli インストール完了\n✅ Marp設定ファイルをコピーしました\n\n',
-            python: '🐍 Python環境をセットアップ中...\n✅ Python仮想環境を作成しました\n✅ Jupyter、pandas、numpy等をインストール\n✅ Jupyterカーネルを登録しました\n\n',
-            env: '🔐 環境変数テンプレートを設定中...\n✅ config/env.local.template を作成しました\n\n',
-            git: '🔒 Git hooksを設定中...\n✅ pre-commitフック設定完了\n✅ セキュリティチェック有効化\n\n',
-            mcp: '🌐 MCPサーバーの追加設定中...\n  - @modelcontextprotocol/server-filesystem\n  - @modelcontextprotocol/server-github\n  - @modelcontextprotocol/server-slack\n✅ MCPサーバーのインストール完了\n\n',
-            done: ''
-        },
-        basic: {
-            indexing: '📄 Indexing Docsを設定中...\n✅ 重要ドキュメントを登録しました\n\n',
-            'mcp-time': '⏰ MCPタイムサーバーを構築中...\n✅ Dockerイメージをビルドしました\n✅ タイムサーバー設定完了\n\n',
-            rules: '📋 Project Rulesを適用中...\n✅ global.mdcを作成しました\n✅ kinopeee/cursorrules v5統合完了\n\n',
-            done: ''
-        }
-    };
+// セットアップ進行状況の処理
+function handleSetupProgress(data, steps, currentStepIndex) {
+    switch (data.type) {
+        case 'output':
+            terminalContent.textContent += data.message;
+            terminalSection.scrollTop = terminalSection.scrollHeight;
+            break;
+            
+        case 'step_start':
+            if (currentStepIndex < steps.length) {
+                const step = steps[currentStepIndex];
+                const stepElement = document.getElementById(`step-${step.id}`);
+                if (stepElement) {
+                    stepElement.querySelector('.step-icon').textContent = '🔄';
+                    stepElement.classList.add('active');
+                }
+                
+                progressFill.style.width = `${step.progress}%`;
+                progressText.textContent = `${step.name} (${step.progress}%)`;
+            }
+            break;
+            
+        case 'step_complete':
+            if (currentStepIndex < steps.length) {
+                const step = steps[currentStepIndex];
+                const stepElement = document.getElementById(`step-${step.id}`);
+                if (stepElement) {
+                    stepElement.querySelector('.step-icon').textContent = '✅';
+                    stepElement.classList.remove('active');
+                    stepElement.classList.add('completed');
+                }
+            }
+            break;
+    }
+}
+
+// 手動セットアップ警告の表示
+function showManualSetupWarning() {
+    const warningDiv = document.createElement('div');
+    warningDiv.className = 'warning-box';
+    warningDiv.innerHTML = `
+        <h4>⚠️ 手動セットアップが必要です</h4>
+        <p>自動セットアップサーバーが利用できません。下記の手順で手動セットアップを実行してください：</p>
+        <ol>
+            <li>ターミナルを開く</li>
+            <li>プロジェクトディレクトリに移動: <code>cd ~/Documents/WorkSpace/work_space</code></li>
+            <li>セットアップスクリプトを実行: <code>bash setup_complete_environment.sh</code></li>
+        </ol>
+        <p>詳細な手順は下記の「手動セットアップ」セクションを参照してください。</p>
+    `;
     
-    return outputs[type][stepId] || '';
+    progressSection.appendChild(warningDiv);
 }
 
 // OS選択ボタンのイベントリスナー
@@ -275,11 +351,6 @@ function showSetupGuide(os) {
     guideContent.innerHTML = html;
     setupGuideSection.classList.remove('hidden');
     setupGuideSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// スリープ関数
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 // ページ読み込み時のアニメーション

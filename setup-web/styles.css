@@ -405,6 +405,41 @@ section h3 {
     margin-bottom: 5px;
 }
 
+/* 警告ボックス */
+.warning-box {
+    background: #fff3e0;
+    border-left: 4px solid var(--warning-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.warning-box h4 {
+    color: #e65100;
+    margin-bottom: 10px;
+}
+
+.warning-box p {
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+.warning-box ol {
+    margin-left: 20px;
+    color: var(--text-secondary);
+}
+
+.warning-box li {
+    margin-bottom: 5px;
+}
+
+.warning-box code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
 /* フッター */
 footer {
     text-align: center;
