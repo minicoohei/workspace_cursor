@@ -3,7 +3,19 @@
 # 🎯 SampleCursorProject_NEW - 魔法のセットアップスクリプト
 # CursorRulesから自動起動対応 + 完全環境構築
 
-set -e
+# エラーハンドリング関数
+handle_error() {
+    echo "❌ エラーが発生しました: $1"
+    echo "🔄 スクリプトを再実行するか、手動で解決してください"
+}
+
+# 重要なコマンドの実行とエラーチェック
+run_critical_command() {
+    if ! "$@"; then
+        handle_error "コマンド実行失敗: $*"
+        exit 1
+    fi
+}
 
 echo "🎯 =================================================="
 echo "✨ Cursor環境セットアップを開始します"
@@ -60,7 +72,10 @@ if ! command -v node &> /dev/null; then
             if ! command -v brew &> /dev/null; then
                 echo "📥 Homebrewをインストール中..."
                 echo "⏳ 少し時間がかかる場合があります"
-                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+                if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+                    handle_error "Homebrewのインストールに失敗しました"
+                    exit 1
+                fi
                 
                 # Homebrewのパスを追加
                 if [[ -f "/opt/homebrew/bin/brew" ]]; then
@@ -72,19 +87,34 @@ if ! command -v node &> /dev/null; then
             fi
             
             echo "🚀 Node.jsをインストール中..."
-            brew install node
+            if ! brew install node; then
+                handle_error "Node.jsのインストールに失敗しました"
+                exit 1
+            fi
             ;;
             
         "linux")
             echo "🐧 LinuxパッケージマネージャーでNode.jsをインストールします"
             if command -v apt &> /dev/null; then
                 echo "📦 Ubuntu/Debian用パッケージを使用"
-                curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-                sudo apt-get install -y nodejs
+                if ! curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -; then
+                    handle_error "NodeSourceリポジトリの追加に失敗しました"
+                    exit 1
+                fi
+                if ! sudo apt-get install -y nodejs; then
+                    handle_error "Node.jsのインストールに失敗しました"
+                    exit 1
+                fi
             elif command -v yum &> /dev/null; then
                 echo "📦 CentOS/RHEL用パッケージを使用"
-                curl -fsSL https://rpm.nodesource.com/setup_lts.x | sudo bash -
-                sudo yum install -y nodejs npm
+                if ! curl -fsSL https://rpm.nodesource.com/setup_lts.x | sudo bash -; then
+                    handle_error "NodeSourceリポジトリの追加に失敗しました"
+                    exit 1
+                fi
+                if ! sudo yum install -y nodejs npm; then
+                    handle_error "Node.jsのインストールに失敗しました"
+                    exit 1
+                fi
             else
                 echo "❌ パッケージマネージャーが見つかりません"
                 echo "💡 手動でNode.jsをインストールしてください: https://nodejs.org/"
@@ -141,7 +171,9 @@ echo ""
 # 1. 基本Cursor環境のセットアップ
 echo "📦 基本Cursor環境をセットアップ中..."
 if [ -f "setup_cursor_environment.sh" ]; then
-    bash setup_cursor_environment.sh
+    if ! bash setup_cursor_environment.sh; then
+        echo "⚠️  setup_cursor_environment.shの実行で一部エラーがありましたが、続行します"
+    fi
 else
     echo "⚠️  setup_cursor_environment.sh が見つかりません"
     echo "🔧 基本設定を手動で実行します..."
@@ -172,26 +204,25 @@ fi
 # 2. VSCode拡張機能のインストール
 echo "🔧 VSCode拡張機能をインストール中..."
 if command -v code &> /dev/null; then
-    # Marp関連
-    code --install-extension marp-team.marp-vscode
+    # 拡張機能のリスト
+    extensions=(
+        "marp-team.marp-vscode"
+        "yzhang.markdown-all-in-one"
+        "bierner.markdown-mermaid"
+        "MS-CEINTL.vscode-language-pack-ja"
+        "eamodio.gitlens"
+        "ms-python.python"
+        "ms-toolsai.jupyter"
+        "esbenp.prettier-vscode"
+        "dbaeumer.vscode-eslint"
+    )
     
-    # Markdown関連
-    code --install-extension yzhang.markdown-all-in-one
-    code --install-extension bierner.markdown-mermaid
-    
-    # 日本語サポート
-    code --install-extension MS-CEINTL.vscode-language-pack-ja
-    
-    # Git関連
-    code --install-extension eamodio.gitlens
-    
-    # Python/Jupyter
-    code --install-extension ms-python.python
-    code --install-extension ms-toolsai.jupyter
-    
-    # 開発支援
-    code --install-extension esbenp.prettier-vscode
-    code --install-extension dbaeumer.vscode-eslint
+    for ext in "${extensions[@]}"; do
+        echo "  - $ext をインストール中..."
+        if ! code --install-extension "$ext" &> /dev/null; then
+            echo "    ⚠️  $ext のインストールに失敗しました（スキップして続行）"
+        fi
+    done
     
     echo "✅ VSCode拡張機能のインストール完了"
 else
@@ -200,13 +231,19 @@ fi
 
 # 3. Marp CLIのインストール
 echo "📊 Marp CLIをインストール中..."
-npm install -g @marp-team/marp-cli
-echo "✅ Marp CLIのインストール完了"
+if ! npm install -g @marp-team/marp-cli; then
+    echo "⚠️  Marp CLIのインストールに失敗しました（スキップして続行）"
+else
+    echo "✅ Marp CLIのインストール完了"
+fi
 
 # Marp設定ファイルをホームディレクトリにコピー
 if [ -f "config/.marprc.yml" ]; then
-    cp config/.marprc.yml ~/.marprc.yml
-    echo "✅ Marp設定ファイルをコピーしました"
+    if cp config/.marprc.yml ~/.marprc.yml; then
+        echo "✅ Marp設定ファイルをコピーしました"
+    else
+        echo "⚠️  Marp設定ファイルのコピーに失敗しました"
+    fi
 fi
 
 # 4. Python環境のセットアップ（Jupyter用）
@@ -214,20 +251,25 @@ echo "🐍 Python環境をセットアップ中..."
 if command -v python3 &> /dev/null; then
     # 仮想環境の作成
     if [ ! -d "env" ]; then
-        python3 -m venv env
-        echo "✅ Python仮想環境を作成しました"
+        if python3 -m venv env; then
+            echo "✅ Python仮想環境を作成しました"
+        else
+            echo "⚠️  Python仮想環境の作成に失敗しました（スキップして続行）"
+        fi
     fi
     
     # 仮想環境をアクティベートして必要なパッケージをインストール
-    source env/bin/activate
-    pip install --upgrade pip
-    pip install jupyter notebook ipykernel pandas numpy matplotlib seaborn
-    
-    # Jupyterカーネルを登録
-    python -m ipykernel install --user --name=cursor_project --display-name="Cursor Project"
-    
-    deactivate
-    echo "✅ Python環境のセットアップ完了"
+    if [ -d "env" ] && source env/bin/activate; then
+        pip install --upgrade pip
+        if pip install jupyter notebook ipykernel pandas numpy matplotlib seaborn; then
+            # Jupyterカーネルを登録
+            python -m ipykernel install --user --name=cursor_project --display-name="Cursor Project"
+            echo "✅ Python環境のセットアップ完了"
+        else
+            echo "⚠️  Pythonパッケージのインストールに失敗しました"
+        fi
+        deactivate
+    fi
 else
     echo "⚠️  Python3が見つかりません"
 fi
@@ -235,9 +277,12 @@ fi
 # 5. 環境変数テンプレートの設定
 echo "🔐 環境変数テンプレートを設定中..."
 if [ -f "config/env.local.template" ] && [ ! -f ".env.local" ]; then
-    cp config/env.local.template .env.local
-    echo "✅ .env.localファイルを作成しました"
-    echo "⚠️  APIキーを設定してください: .env.local"
+    if cp config/env.local.template .env.local; then
+        echo "✅ .env.localファイルを作成しました"
+        echo "⚠️  APIキーを設定してください: .env.local"
+    else
+        echo "⚠️  .env.localファイルの作成に失敗しました"
+    fi
 fi
 
 # 6. MCPサーバーの追加設定
@@ -254,7 +299,9 @@ npm_servers=(
 
 for server in "${npm_servers[@]}"; do
     echo "  - $server をインストール中..."
-    npm install -g "$server" || echo "    ⚠️  $server のインストールに失敗しました"
+    if ! npm install -g "$server"; then
+        echo "    ⚠️  $server のインストールに失敗しました（スキップして続行）"
+    fi
 done
 
 echo "✅ MCPサーバーのインストール完了"
@@ -292,24 +339,26 @@ fi
 
 echo ""
 
-# 8. 依存関係のインストール
+# 8. 依存関係のインストール（リトライロジック付き）
 echo "📦 必要なパッケージをインストール中..."
 
-npm install --silent
-
-if [ $? -ne 0 ]; then
+# 最初の試行（サイレント）
+if npm install --silent; then
+    echo "✅ パッケージのインストール完了"
+else
     echo "⚠️  インストールに時間がかかっています。再試行中..."
-    npm install
     
-    if [ $? -ne 0 ]; then
+    # 2回目の試行（詳細出力）
+    if npm install; then
+        echo "✅ パッケージのインストール完了"
+    else
         echo "❌ パッケージのインストールに失敗しました"
         echo "💡 手動で実行してください: npm install"
         echo "🤝 問題が解決しない場合は、ドキュメントを確認してください"
-        exit 1
+        echo "⚠️  Webサーバー機能は利用できませんが、他の機能は利用可能です"
     fi
 fi
 
-echo "✅ パッケージのインストール完了"
 echo ""
 
 # 9. Docker環境の確認とMCPサーバー起動
@@ -324,17 +373,35 @@ if command -v docker &> /dev/null; then
         
         # MCPタイムサーバーのビルドと起動
         echo "🔨 MCPタイムサーバーをビルド・起動中..."
-        cd mcp-time
-        if docker compose build &> /dev/null; then
-            echo "✅ MCPタイムサーバーのビルドが完了しました"
-            
-            # バックグラウンドで起動
-            docker compose up -d
-            echo "✅ MCPタイムサーバーを起動しました"
+        
+        # mcp-timeディレクトリの存在確認
+        if [ ! -d "mcp-time" ]; then
+            echo "⚠️  mcp-timeディレクトリが見つかりません"
+            echo "💡 MCPタイムサーバーをスキップして続行します"
+            echo "🔧 手動でMCPサーバーをセットアップする場合は、以下を実行してください:"
+            echo "   git clone https://github.com/your-repo/mcp-time.git"
         else
-            echo "⚠️  MCPタイムサーバーのビルドに失敗しました"
+            # ディレクトリが存在する場合のみ処理を実行
+            if cd mcp-time; then
+                if docker compose build &> /dev/null; then
+                    echo "✅ MCPタイムサーバーのビルドが完了しました"
+                    
+                    # バックグラウンドで起動
+                    if docker compose up -d; then
+                        echo "✅ MCPタイムサーバーを起動しました"
+                    else
+                        echo "⚠️  MCPタイムサーバーの起動に失敗しました"
+                    fi
+                else
+                    echo "⚠️  MCPタイムサーバーのビルドに失敗しました"
+                fi
+                
+                # 元のディレクトリに戻る
+                cd ..
+            else
+                echo "⚠️  mcp-timeディレクトリへの移動に失敗しました"
+            fi
         fi
-        cd ..
     else
         echo "⚠️  Docker Composeがインストールされていません"
         echo "  MCPサーバーを使用するにはDocker Composeが必要です"
@@ -357,7 +424,8 @@ fi
 # サーバーファイルの確認
 if [ ! -f "setup-web/server.js" ]; then
     echo "❌ setup-web/server.jsが見つかりません"
-    exit 1
+    echo "⚠️  Webインターフェースは利用できませんが、環境構築は完了しています"
+    exit 0
 fi
 
 echo ""
@@ -412,7 +480,11 @@ esac
 echo "🚀 サーバーを起動します..."
 echo "🎯 Cursor環境セットアップをお楽しみください"
 
-node setup-web/server.js
+if ! node setup-web/server.js; then
+    echo ""
+    echo "⚠️  Webサーバーの起動に失敗しました"
+    echo "💡 環境構築は完了していますので、手動で確認してください"
+fi
 
 # 終了処理
 echo ""
