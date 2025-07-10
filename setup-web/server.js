@@ -132,6 +132,15 @@ function getStepsForType(type) {
             { name: 'Git hooks・セキュリティ設定', keywords: ['git', 'hook', 'security'] },
             { name: 'MCPサーバー群インストール', keywords: ['mcp', 'server', 'install'] }
         ],
+        magic: [
+            { name: 'Node.js環境確認・インストール', keywords: ['node', 'npm', 'install'] },
+            { name: 'Cursor基本環境構築', keywords: ['cursor', 'indexing', 'mcp'] },
+            { name: 'VSCode拡張機能インストール', keywords: ['vscode', 'extension', 'install'] },
+            { name: 'Marp CLI環境構築', keywords: ['marp', 'cli', 'slide'] },
+            { name: 'Python・Jupyter環境構築', keywords: ['python', 'jupyter', 'venv'] },
+            { name: 'MCPサーバー群設定', keywords: ['mcp', 'server', 'docker'] },
+            { name: 'Webサーバー起動', keywords: ['web', 'server', 'localhost'] }
+        ],
         basic: [
             { name: 'Indexing Docs設定', keywords: ['indexing', 'docs'] },
             { name: 'MCPタイムサーバー構築', keywords: ['mcp', 'time', 'docker'] },

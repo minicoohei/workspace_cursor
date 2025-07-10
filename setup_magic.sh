@@ -184,21 +184,82 @@ else
         echo "✅ .cursorディレクトリを作成しました"
     fi
     
-    # mcp.jsonの作成
-    cat > .cursor/mcp.json << 'EOF'
+    # mcp.jsonの確認（既存の設定を保持）
+    if [ ! -f ".cursor/mcp.json" ]; then
+        echo "🔧 MCPサーバー設定を作成中..."
+        cat > .cursor/mcp.json << 'EOF'
 {
   "mcpServers": {
     "mcp-time": {
-      "command": "docker",
-      "args": ["compose", "-f", "mcp-time/docker-compose.yml", "up"],
+      "command": "bash",
+      "args": ["scripts/start-mcp-time.sh"],
       "env": {},
-      "description": "日本時間のタイムスタンプを提供するMCPサーバー",
+      "description": "日本時間のタイムスタンプを提供するMCPサーバー（Docker/Python自動選択）",
       "autoStart": true
+    },
+    "mcp-time-python": {
+      "command": "bash",
+      "args": ["scripts/start-mcp-time-python.sh"],
+      "env": {},
+      "description": "日本時間のタイムスタンプを提供するMCPサーバー（Python直接実行）",
+      "autoStart": false
+    },
+    "cursor-notebook": {
+      "command": "npx",
+      "args": ["cursor-notebook-mcp"],
+      "env": {},
+      "description": "Jupyter Notebookの実行とデータ分析をサポートするMCPサーバー",
+      "autoStart": false
+    },
+    "github": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github_token}"
+      },
+      "description": "GitHub公式MCP Server（リポジトリ、Issue、PR管理）",
+      "autoStart": false
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"],
+      "env": {},
+      "description": "Playwrightによるブラウザ自動化とWebスクレイピングを提供するMCPサーバー",
+      "autoStart": false
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}"
+      ],
+      "env": {},
+      "description": "ファイルシステム操作（読み書き、ディレクトリ管理、検索）を提供するMCPサーバー",
+      "autoStart": false
     }
-  }
+  },
+  "inputs": [
+    {
+      "id": "github_token",
+      "type": "promptString",
+      "description": "GitHub Personal Access Token",
+      "password": true
+    }
+  ]
 }
 EOF
-    echo "✅ MCPサーバー設定を作成しました"
+        echo "✅ MCPサーバー設定を作成しました"
+    else
+        echo "✅ 既存のMCPサーバー設定を保持します"
+    fi
 fi
 
 # 2. VSCode拡張機能のインストール
@@ -428,24 +489,13 @@ if [ ! -f "setup-web/server.js" ]; then
     exit 0
 fi
 
-echo ""
-echo "🚀 =================================================="
-echo "🌐 Webセットアップツールを起動中..."
-echo "🔗 URL: http://localhost:3000"
-echo "🚀 =================================================="
-echo ""
-echo "💡 ブラウザが自動で開かない場合は、手動でアクセスしてください:"
-echo "   👉 http://localhost:3000"
-echo ""
-echo "🛑 終了するには Ctrl+C を押してください"
-echo ""
-
 # 完了メッセージ
+echo ""
 echo "🎊 =========================================="
 echo "✨ Cursor完全環境セットアップ完了！"
 echo "🌟 以下の機能が利用可能になりました："
 echo "   ✅ Cursor IDE設定"
-echo "   ✅ MCPサーバー（mcp-time）"
+echo "   ✅ MCPサーバー群（6種類）"
 echo "   ✅ VSCode拡張機能"
 echo "   ✅ Marp CLI"
 echo "   ✅ Python/Jupyter環境"
@@ -458,37 +508,54 @@ echo "3. samples/ディレクトリでサンプルを確認してください"
 echo "🎊 =========================================="
 echo ""
 
-# ブラウザを開く
+echo "🚀 =================================================="
+echo "🌐 Webセットアップツールを起動中..."
+echo "🔗 URL: http://localhost:3000"
+echo "🚀 =================================================="
+echo ""
+echo "💡 ブラウザが自動で開きます..."
+echo "💡 Webインターフェースで追加のセットアップを実行できます"
+echo "🛑 終了するには Ctrl+C を押してください"
+echo ""
+
+# ブラウザを開く（非同期）
 sleep 2
 case $OS_TYPE in
     "mac")
-        open "http://localhost:3000" 2>/dev/null || true
+        open "http://localhost:3000" 2>/dev/null &
         ;;
     "linux")
         if command -v xdg-open &> /dev/null; then
-            xdg-open "http://localhost:3000" 2>/dev/null || true
+            xdg-open "http://localhost:3000" 2>/dev/null &
         fi
         ;;
     "windows")
         if command -v start &> /dev/null; then
-            start "http://localhost:3000" 2>/dev/null || true
+            start "http://localhost:3000" 2>/dev/null &
         fi
         ;;
 esac
 
-# サーバーを起動
-echo "🚀 サーバーを起動します..."
-echo "🎯 Cursor環境セットアップをお楽しみください"
+# サーバーを起動（フォアグラウンド）
+echo "🚀 Webサーバーを起動します..."
+echo "🎯 Webインターフェースでセットアップを続行してください"
+echo ""
 
-if ! node setup-web/server.js; then
+# Node.jsサーバーを起動
+if node setup-web/server.js; then
+    echo ""
+    echo "👋 Webサーバーが正常に終了しました"
+else
     echo ""
     echo "⚠️  Webサーバーの起動に失敗しました"
     echo "💡 環境構築は完了していますので、手動で確認してください"
+    echo "🔧 手動でWebサーバーを起動する場合："
+    echo "   cd setup-web && node server.js"
 fi
 
 # 終了処理
 echo ""
 echo "👋 お疲れさまでした！"
-echo "🎯 またいつでもこのスクリプトを実行してください"
+echo "🎯 Cursor環境セットアップが完了しました"
 echo "🌟 良い開発ライフをお過ごしください！"
 echo "🤝 ありがとうございました" 

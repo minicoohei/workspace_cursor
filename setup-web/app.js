@@ -133,6 +133,7 @@ const setupGuides = {
 // DOM要素の取得
 const completeSetupBtn = document.getElementById('complete-setup-btn');
 const basicSetupBtn = document.getElementById('basic-setup-btn');
+const magicSetupBtn = document.getElementById('magic-setup-btn');
 const osButtons = document.querySelectorAll('.os-btn');
 const setupGuideSection = document.getElementById('setup-guide');
 const guideContent = document.getElementById('guide-content');
@@ -147,12 +148,14 @@ const nextStepsSection = document.getElementById('next-steps');
 // セットアップボタンのイベントリスナー
 completeSetupBtn.addEventListener('click', () => startSetup('complete'));
 basicSetupBtn.addEventListener('click', () => startSetup('basic'));
+magicSetupBtn.addEventListener('click', () => startSetup('magic'));
 
 // セットアップ開始
 function startSetup(type) {
     // ボタンを無効化
     completeSetupBtn.disabled = true;
     basicSetupBtn.disabled = true;
+    magicSetupBtn.disabled = true;
     
     // プログレスセクションを表示
     progressSection.classList.remove('hidden');
@@ -170,6 +173,14 @@ function startSetup(type) {
         { id: 'env', name: '環境変数テンプレート作成', progress: 70 },
         { id: 'git', name: 'Git hooks・セキュリティ設定', progress: 85 },
         { id: 'mcp', name: 'MCPサーバー群インストール', progress: 100 }
+    ] : type === 'magic' ? [
+        { id: 'nodejs', name: 'Node.js環境確認・インストール', progress: 15 },
+        { id: 'basic', name: 'Cursor基本環境構築', progress: 30 },
+        { id: 'vscode', name: 'VSCode拡張機能インストール', progress: 45 },
+        { id: 'marp', name: 'Marp CLI環境構築', progress: 60 },
+        { id: 'python', name: 'Python・Jupyter環境構築', progress: 75 },
+        { id: 'mcp', name: 'MCPサーバー群設定', progress: 90 },
+        { id: 'web', name: 'Webサーバー起動', progress: 100 }
     ] : [
         { id: 'indexing', name: 'Indexing Docs設定', progress: 30 },
         { id: 'mcp-time', name: 'MCPタイムサーバー構築', progress: 70 },
@@ -195,7 +206,9 @@ function startSetup(type) {
 
 // 実際のセットアップを実行
 async function executeSetup(type, steps) {
-    const scriptName = type === 'complete' ? 'setup_complete_environment.sh' : 'setup_cursor_environment.sh';
+    const scriptName = type === 'complete' ? 'setup_complete_environment.sh' : 
+                      type === 'magic' ? 'setup_magic.sh' : 
+                      'setup_cursor_environment.sh';
     
     terminalContent.textContent = `🚀 ${scriptName} を実行中...\n\n`;
     
@@ -280,6 +293,7 @@ async function executeSetup(type, steps) {
         // ボタンを再度有効化
         completeSetupBtn.disabled = false;
         basicSetupBtn.disabled = false;
+        magicSetupBtn.disabled = false;
     }
 }
 
