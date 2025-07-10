@@ -13,7 +13,8 @@
         "-y",
         "@modelcontextprotocol/server-filesystem",
         "/Users/kou1904/Documents"
-      ]
+      ],
+      "description": "ファイルシステム操作用MCPサーバー"
     },
     "github": {
       "command": "npx",
@@ -23,26 +24,8 @@
       ],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
-      }
-    },
-    "postgres": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-postgres",
-        "postgresql://localhost/mydb"
-      ]
-    },
-    "slack": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-slack"
-      ],
-      "env": {
-        "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
-        "SLACK_TEAM_ID": "${SLACK_TEAM_ID}"
-      }
+      },
+      "description": "GitHub連携用MCPサーバー"
     },
     "figma-developer-mcp": {
       "command": "npx",
@@ -53,24 +36,8 @@
       ],
       "env": {
         "FIGMA_API_KEY": "${FIGMA_ACCESS_TOKEN}"
-      }
-    },
-    "playwright": {
-      "command": "npx",
-      "args": [
-        "@playwright/mcp@latest"
-      ],
-      "env": {}
-    },
-    "notion": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@suekou/mcp-notion-server"
-      ],
-      "env": {
-        "NOTION_API_TOKEN": "${NOTION_API_KEY}"
-      }
+      },
+      "description": "Figmaデザイン連携用MCPサーバー"
     }
   }
 } 

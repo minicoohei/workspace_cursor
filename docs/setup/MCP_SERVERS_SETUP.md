@@ -7,13 +7,9 @@
 | サーバー名 | 用途 | 自動起動 | 必要な認証情報 |
 |-----------|------|---------|---------------|
 | mcp-time | タイムスタンプ提供 | ✅ | なし |
-| jupyter | Jupyter Notebook操作 | ❌ | なし |
+| filesystem | ファイルシステム操作 | ❌ | なし |
 | github | GitHub連携 | ❌ | GITHUB_TOKEN |
-| playwright | ブラウザ自動化 | ❌ | なし |
-| slack | Slack連携 | ❌ | SLACK_BOT_TOKEN, SLACK_TEAM_ID |
-| notion | Notion連携 | ❌ | NOTION_API_KEY |
-| figma | Figmaデザイン連携 | ❌ | FIGMA_ACCESS_TOKEN |
-
+| figma-developer-mcp | Figmaデザイン連携 | ❌ | FIGMA_ACCESS_TOKEN |
 
 ## 🚀 セットアップ手順
 
@@ -24,27 +20,20 @@
 ```bash
 # .env.local
 GITHUB_TOKEN=your_github_personal_access_token
-SLACK_BOT_TOKEN=your_slack_bot_token
-SLACK_TEAM_ID=your_slack_team_id
-NOTION_API_KEY=your_notion_api_key
 FIGMA_ACCESS_TOKEN=your_figma_access_token
 ```
 
 ### 2. 各MCPサーバーの詳細設定
 
-#### 📓 Jupyter MCPサーバー
-```bash
-# Python環境が必要
-pip install mcp-jupyter
-
-# または uvxを使用（推奨）
-uvx mcp-jupyter
-```
+#### 📁 Filesystem MCPサーバー
+- ファイルシステムの読み書き操作
+- ディレクトリの作成・削除
+- ファイル検索・移動
 
 **使用例**:
-- Notebookの作成・実行
-- セルの操作
-- 変数の確認
+- ファイルの作成・編集
+- ディレクトリ構造の管理
+- ファイル検索
 
 #### 🐙 GitHub MCPサーバー
 1. GitHubでPersonal Access Tokenを作成
@@ -56,37 +45,6 @@ uvx mcp-jupyter
 - Issue/PRの操作
 - コードの検索
 
-#### 🎭 Playwright MCPサーバー
-```bash
-# 初回のみブラウザをインストール
-npx playwright install
-```
-
-**使用例**:
-- Webページのスクレイピング
-- UIテストの自動化
-- スクリーンショット取得
-
-#### 💬 Slack MCPサーバー
-1. Slack Appを作成
-2. Bot User OAuth Tokenを取得
-3. 必要なスコープ：`chat:write`, `channels:read`
-
-**使用例**:
-- メッセージの送信
-- チャンネル情報の取得
-- 通知の自動化
-
-#### 📝 Notion MCPサーバー
-1. Notion Integrationを作成
-2. API Keyを取得
-3. 対象ページでIntegrationを有効化
-
-**使用例**:
-- ページの作成・更新
-- データベース操作
-- コンテンツの同期
-
 #### 🎨 Figma MCPサーバー
 1. FigmaでPersonal Access Tokenを作成
 2. 必要な権限：`file:read`
@@ -96,6 +54,15 @@ npx playwright install
 - コンポーネント情報の抽出
 - アセットのエクスポート
 
+#### ⏰ MCP-Time サーバー
+- 日本時間のタイムスタンプ提供
+- 自動起動設定済み
+- Docker Composeで実行
+
+**使用例**:
+- 正確な日本時間の取得
+- ドキュメントのタイムスタンプ
+- ログ記録用時刻
 
 ## 🔧 MCPサーバーの管理
 
@@ -119,13 +86,13 @@ npx playwright install
 
 ## 📚 使用例
 
-### Jupyter Notebookの操作
+### ファイルシステム操作
 ```typescript
-// Notebookを作成
-await createNotebook("analysis.ipynb")
+// ファイルを作成
+await createFile("example.txt", "Hello World")
 
-// セルを実行
-await executeCell(0)
+// ディレクトリを作成
+await createDirectory("new_folder")
 ```
 
 ### GitHubリポジトリの操作
@@ -137,10 +104,13 @@ await createIssue("Bug report", "Description...")
 await mergePullRequest(123)
 ```
 
-### Slackメッセージの送信
+### Figmaデザインファイルの操作
 ```typescript
-// チャンネルにメッセージを送信
-await postMessage("#general", "Hello from MCP!")
+// デザインファイルを取得
+await getFigmaFile("fileKey")
+
+// コンポーネントをエクスポート
+await exportComponent("nodeId")
 ```
 
 ## 🛡️ セキュリティ注意事項
@@ -155,5 +125,15 @@ await postMessage("#general", "Hello from MCP!")
    - テスト用の環境を用意
    - ログに認証情報を出力しない
 
+## 🗑️ 削除されたサーバー
+
+以下のサーバーは使用頻度が低いため設定から削除されました：
+- `postgres`: PostgreSQL操作用（必要時に再追加可能）
+- `slack`: Slack連携用（必要時に再追加可能）
+- `playwright`: ブラウザ自動化用（必要時に再追加可能）
+- `notion`: Notion連携用（必要時に再追加可能）
+
+必要に応じて、これらのサーバーを再度追加することができます。
+
 ---
-最終更新: 2025-07-10 23:00:00 JST 
+最終更新: 2025-07-10 23:15:00 JST 
