@@ -1,8 +1,8 @@
-
 ---
 alwaysApply: true
-description: Cursor初心者向け学習プロジェクトの統合ルール。kinopeee/cursorrules v5ベース + プロジェクト固有ルール
 ---
+description: Cursor初心者向け学習プロジェクトの統合ルール。kinopeee/cursorrules v5ベース + プロジェクト固有ルール
+
 
 <!-- Description: Cursor初心者向け学習プロジェクトの基本ルール。日本語対応、安全性最優先、ドキュメント最終更新時刻の自動記載を含む。 -->
 
