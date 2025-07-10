@@ -1,0 +1,102 @@
+{
+  "indexDocs": [
+    {
+      "path": "README.md",
+      "description": "プロジェクトの概要とセットアップ手順"
+    },
+    {
+      "path": "directorystructure.md",
+      "description": "プロジェクトのディレクトリ構造説明"
+    },
+    {
+      "path": "安全ガイドライン.md",
+      "description": "初心者向け安全ガイドライン"
+    },
+    {
+      "path": "MAGIC_SETUP.md",
+      "description": "魔法のセットアップ機能説明"
+    },
+    {
+      "path": "docs/setup/MCP_TIME_SETUP_GUIDE.md",
+      "description": "MCPタイムサーバーの詳細セットアップガイド"
+    },
+    {
+      "path": "docs/setup/MCP_SERVERS_SETUP.md",
+      "description": "MCPサーバー群のセットアップガイド"
+    },
+    {
+      "path": "docs/CLEANUP_SUMMARY.md",
+      "description": "プロジェクトクリーンアップの記録"
+    },
+    {
+      "path": "ObsidianVault/Templates/README_テンプレート一覧.md",
+      "description": "利用可能なテンプレート一覧"
+    },
+    {
+      "path": "CursorCourse/README.md",
+      "description": "Cursor学習コースの説明"
+    },
+    {
+      "path": ".cursor/mcp.json",
+      "description": "MCPサーバーの設定ファイル"
+    },
+    {
+      "path": ".cursor/settings.json",
+      "description": "Cursor IDE設定ファイル"
+    }
+  ],
+  "indexFiles": [
+    {
+      "pattern": "scripts/*.sh",
+      "description": "セットアップスクリプト群"
+    },
+    {
+      "pattern": "setup-web/*.js",
+      "description": "Webセットアップツール"
+    },
+    {
+      "pattern": "ObsidianVault/Templates/*.md",
+      "description": "ドキュメントテンプレート集"
+    },
+    {
+      "pattern": "CursorCourse/**/*.md",
+      "description": "学習コンテンツ"
+    },
+    {
+      "pattern": "samples/**/*",
+      "description": "サンプルファイル群"
+    },
+    {
+      "pattern": "mcp-time/**/*.py",
+      "description": "MCPタイムサーバーのPythonコード"
+    }
+  ],
+  "excludePatterns": [
+    "node_modules/**",
+    ".git/**",
+    "*.log",
+    ".DS_Store",
+    "__pycache__/**",
+    "*.pyc",
+    ".env*",
+    "dist/**",
+    "build/**"
+  ],
+  "projectContext": {
+    "type": "learning_project",
+    "framework": "cursor_ide_education",
+    "language": "japanese",
+    "targetAudience": "cursor_beginners",
+    "safetyLevel": "high",
+    "features": [
+      "mcp_servers",
+      "automated_setup",
+      "web_interface",
+      "document_templates",
+      "learning_course",
+      "safety_guidelines"
+    ]
+  },
+  "codebaseDescription": "Cursor初心者向けの包括的な学習環境。MCPサーバー、自動セットアップ、Webインターフェース、ドキュメントテンプレート、学習コースを含む完全な開発環境構築プロジェクト。",
+  "lastUpdated": "2025-01-28T15:45:00+09:00"
+} 
