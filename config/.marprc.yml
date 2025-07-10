@@ -1,0 +1,26 @@
+# Marp CLI設定ファイル
+allowLocalFiles: true
+html: true
+pdf: true
+theme: 
+  - https://cunhapaulo.github.io/style/freud.css
+  - ./ObsidianVault/Templates/custom-theme.css
+options:
+  markdown:
+    breaks: false
+    html: true
+  pdf:
+    format: A4
+    margin: 0mm
+    printBackground: true
+engine:
+  name: '@marp-team/marp-core'
+  
+# 出力設定
+output: ./output
+
+# ウォッチモード設定
+watch: false
+
+---
+最終更新: 2025-07-10 22:40:00 JST 

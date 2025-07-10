@@ -1,0 +1,12 @@
+services:
+  mcp-time:
+    container_name: mcp-time
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/app/mcp-time
+    environment:
+      - TZ=Asia/Tokyo 

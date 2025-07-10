@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 SampleCursorProject_NEW - 完全環境セットアップ</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 SampleCursorProject_NEW</h1>
+            <h2>完全環境セットアップツール</h2>
+            <p class="subtitle">研修・学習用の完全な開発環境を一発構築！ 🚀</p>
+        </header>
+
+        <main>
+            <section class="intro">
+                <h3>📋 このツールで構築される環境</h3>
+                <div class="environment-overview">
+                    <div class="env-item">
+                        <span class="check">✅</span>
+                        <strong>Cursor IDE</strong> - Project Rules、Indexing Docs、MCP設定
+                    </div>
+                    <div class="env-item">
+                        <span class="check">✅</span>
+                        <strong>VSCode拡張機能</strong> - 15種類以上の必須拡張機能を自動インストール
+                    </div>
+                    <div class="env-item">
+                        <span class="check">✅</span>
+                        <strong>Marp環境</strong> - スライド作成環境（CLI、設定、サンプル）
+                    </div>
+                    <div class="env-item">
+                        <span class="check">✅</span>
+                        <strong>Jupyter環境</strong> - データ分析環境（Python、カーネル設定）
+                    </div>
+                    <div class="env-item">
+                        <span class="check">✅</span>
+                        <strong>MCPサーバー群</strong> - 9種類のMCPサーバー（GitHub、Slack、時刻等）
+                    </div>
+                    <div class="env-item">
+                        <span class="check">✅</span>
+                        <strong>セキュリティ設定</strong> - Git hooks、APIキー管理、初心者保護
+                    </div>
+                </div>
+            </section>
+
+            <section class="quick-setup">
+                <h3>🚀 クイックセットアップ（推奨）</h3>
+                <div class="setup-options">
+                    <div class="setup-card recommended">
+                        <h4>🎯 完全自動セットアップ</h4>
+                        <p>すべての環境を自動構築（研修・学習に最適）</p>
+                        <button class="setup-btn primary" id="complete-setup-btn">
+                            <span class="icon">🚀</span>
+                            <span class="label">完全環境セットアップを開始</span>
+                        </button>
+                        <div class="setup-info">
+                            <small>実行内容: setup_complete_environment.sh</small>
+                            <small>所要時間: 約5-10分</small>
+                        </div>
+                    </div>
+                    
+                    <div class="setup-card">
+                        <h4>⚡ 基本セットアップ</h4>
+                        <p>Cursor設定とMCPタイムサーバーのみ</p>
+                        <button class="setup-btn secondary" id="basic-setup-btn">
+                            <span class="icon">⚙️</span>
+                            <span class="label">基本セットアップを開始</span>
+                        </button>
+                        <div class="setup-info">
+                            <small>実行内容: setup_cursor_environment.sh</small>
+                            <small>所要時間: 約2-3分</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="setup-progress" class="setup-progress hidden">
+                <h3>📊 セットアップ進行状況</h3>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">準備中...</div>
+                </div>
+                <div class="progress-steps" id="progress-steps"></div>
+            </section>
+
+            <section id="terminal-output" class="terminal-output hidden">
+                <h3>💻 実行ログ</h3>
+                <div class="terminal">
+                    <pre id="terminal-content"></pre>
+                </div>
+            </section>
+
+            <section class="directory-structure">
+                <h3>📁 プロジェクト構造</h3>
+                <div class="structure-preview">
+                    <pre>
+SampleCursorProject_NEW/
+├── 📂 .cursor/          # Cursor IDE設定
+├── 📂 .vscode/          # エディタ設定
+├── 📂 config/           # 各種設定ファイル
+├── 📂 docs/             # ドキュメント
+├── 📂 samples/          # サンプルファイル
+├── 📂 CursorCourse/     # 学習コンテンツ
+├── 📂 ObsidianVault/    # テンプレート集
+├── 📂 mcp-time/         # MCPタイムサーバー
+└── 📂 scripts/          # ユーティリティ</pre>
+                </div>
+            </section>
+
+            <section class="manual-setup">
+                <h3>🔧 手動セットアップ</h3>
+                <div class="os-selection">
+                    <p>OSを選択して手動セットアップ手順を確認：</p>
+                    <div class="os-buttons">
+                        <button class="os-btn" id="mac-btn" data-os="mac">
+                            <span class="icon">🍎</span>
+                            <span class="label">Mac</span>
+                        </button>
+                        <button class="os-btn" id="windows-btn" data-os="windows">
+                            <span class="icon">🪟</span>
+                            <span class="label">Windows</span>
+                        </button>
+                        <button class="os-btn" id="linux-btn" data-os="linux">
+                            <span class="icon">🐧</span>
+                            <span class="label">Linux</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="setup-guide" class="setup-guide hidden">
+                <h3>📖 手動セットアップ手順</h3>
+                <div id="guide-content"></div>
+            </section>
+
+            <section class="next-steps hidden" id="next-steps">
+                <h3>🎉 セットアップ完了！次のステップ</h3>
+                <ol class="next-steps-list">
+                    <li>
+                        <strong>環境変数を設定</strong>
+                        <code>cp config/env.local.template .env.local</code>
+                        <p>APIキーを設定してください</p>
+                    </li>
+                    <li>
+                        <strong>Cursorを再起動</strong>
+                        <p>設定を反映させるため、一度Cursorを終了して再起動</p>
+                    </li>
+                    <li>
+                        <strong>サンプルを確認</strong>
+                        <p>samples/ディレクトリでMarpやJupyterのサンプルを確認</p>
+                    </li>
+                    <li>
+                        <strong>学習開始！</strong>
+                        <p>ObsidianVault/Templates/の0001から順番に学習</p>
+                    </li>
+                </ol>
+            </section>
+        </main>
+
+        <footer>
+            <p>🎯 SampleCursorProject_NEW - Cursor IDE学習環境</p>
+            <p>kinopeee/cursorrules v5ベース | 初心者向け安全設計</p>
+            <p class="update-time">最終更新: 2025-07-10 23:45:00 JST</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html> 

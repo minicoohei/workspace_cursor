@@ -1,0 +1,47 @@
+{
+  "recommendations": [
+    // Marp - Markdownスライド作成（Cursor内プレビュー対応）
+    "marp-team.marp-vscode",
+    
+    // Markdown関連
+    "yzhang.markdown-all-in-one",
+    "bierner.markdown-mermaid",
+    "davidanson.vscode-markdownlint",
+    
+    // 日本語サポート
+    "ms-ceintl.vscode-language-pack-ja",
+    
+    // コード品質
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    
+    // Git
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+    
+    // Python（MCPサーバー用）
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    
+    // Jupyter Notebook
+    "ms-toolsai.jupyter",
+    "ms-toolsai.jupyter-keymap",
+    "ms-toolsai.jupyter-renderers",
+    "ms-toolsai.vscode-jupyter-cell-tags",
+    "ms-toolsai.vscode-jupyter-slideshow",
+    
+    // Docker
+    "ms-azuretools.vscode-docker",
+    
+    // その他便利ツール
+    "streetsidesoftware.code-spell-checker",
+    "wayou.vscode-todo-highlight",
+    "gruntfuggly.todo-tree",
+    
+    // Draw.io統合
+    "hediet.vscode-drawio",
+    
+    // CSV表示
+    "mechatroner.rainbow-csv"
+  ]
+} 

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>データビジュアライザー - Cursorライブコーディング</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>リアルタイムデータビジュアライザー</h1>
+            <p>Cursor AIと一緒にインタラクティブなWebアプリを作ろう！</p>
+        </header>
+
+        <main>
+            <section class="controls">
+                <h2>コントロールパネル</h2>
+                <div class="button-group">
+                    <button id="generate-btn" class="btn btn-primary">
+                        <span class="icon">📊</span>
+                        データ生成
+                    </button>
+                    <button id="clear-btn" class="btn btn-secondary">
+                        <span class="icon">🗑️</span>
+                        クリア
+                    </button>
+                    <button id="animate-btn" class="btn btn-accent">
+                        <span class="icon">▶️</span>
+                        アニメーション
+                    </button>
+                </div>
+                
+                <div class="settings">
+                    <label for="data-count">データ数:</label>
+                    <input type="range" id="data-count" min="5" max="20" value="10">
+                    <span id="count-display">10</span>
+                </div>
+            </section>
+
+            <section class="visualization">
+                <h2>可視化エリア</h2>
+                <div id="chart-container">
+                    <svg id="chart" viewBox="0 0 800 400"></svg>
+                </div>
+                <div id="stats" class="stats-panel">
+                    <div class="stat-item">
+                        <span class="label">平均値:</span>
+                        <span id="avg-value">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="label">最大値:</span>
+                        <span id="max-value">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="label">最小値:</span>
+                        <span id="min-value">-</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="code-preview">
+                <h2>コードプレビュー</h2>
+                <div class="tabs">
+                    <button class="tab active" data-tab="html">HTML</button>
+                    <button class="tab" data-tab="css">CSS</button>
+                    <button class="tab" data-tab="js">JavaScript</button>
+                </div>
+                <div id="code-display" class="code-display">
+                    <pre><code id="code-content"></code></pre>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Cursor AI Live Coding Demo - Chapter 2</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

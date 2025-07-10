@@ -1,0 +1,35 @@
+{
+  "files.encoding": "utf8",
+  "files.autoGuessEncoding": false,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "markdown.marp.enableHtml": true,
+  "markdown.marp.themes": [
+    "https://cunhapaulo.github.io/style/freud.css"
+  ],
+  "markdown.marp.preview.htmlEnabled": true,
+  "markdown.marp.exportType": "html",
+  "markdown.marp.chromePath": "",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.defaultProfile.windows": "powershell",
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "files.exclude": {
+    "**/.git": false,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/__pycache__": true,
+    "**/*.pyc": true
+  },
+  "jupyter.askForKernelRestart": false,
+  "jupyter.interactiveWindow.creationMode": "perFile",
+  "notebook.cellToolbarLocation": {
+    "default": "right",
+    "jupyter-notebook": "left"
+  },
+  "notebook.lineNumbers": "on"
+}

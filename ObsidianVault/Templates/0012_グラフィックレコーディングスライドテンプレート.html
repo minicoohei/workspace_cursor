@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template ID: 0012 - グラフィックレコーディング風スライド</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&family=Yomogi&family=Zen+Kurenaido&display=swap');
+    </style>
+    
+    <style>
+        /* CSS変数定義 */
+        :root {
+            --ui-color-1: #1B6C8C;
+            --ui-color-2: #BF8136;
+            --ui-color-3: #F2E8E4;
+            --ui-color-4: #260101;
+            --ui-color-5: #BF5656;
+            --bg-color: #FFF8F5;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background-color: var(--bg-color);
+            overflow: hidden;
+        }
+        
+        /* スライドコンテナ */
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* 各スライド */
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            padding: 40px;
+        }
+        
+        .slide.active {
+            opacity: 1;
+        }
+        
+        /* スライドタイポグラフィ */
+        .slide-title { 
+            font-size: 60px; 
+            font-weight: 900; 
+            color: var(--ui-color-1);
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .slide-subtitle { 
+            font-size: 30px; 
+            font-weight: 700;
+            color: var(--ui-color-4);
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .main-message { 
+            font-size: 48px; 
+            font-weight: 700;
+            color: var(--ui-color-1);
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .content-text { 
+            font-size: 24px; 
+            line-height: 1.8;
+            color: var(--ui-color-4);
+        }
+        
+        .handwritten { 
+            font-family: 'Yomogi', cursive; 
+            font-size: 22px;
+            color: var(--ui-color-2);
+        }
+        
+        /* タイトルスライド */
+        .title-slide {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .animated-icon {
+            animation: bounce 2s infinite;
+            color: var(--ui-color-1);
+            margin-bottom: 30px;
+        }
+        
+        /* アイコン中心型レイアウト */
+        .icon-centered {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .main-icon {
+            color: var(--ui-color-1);
+            margin: 40px 0;
+        }
+        
+        /* 吹き出し */
+        .bubble {
+            position: absolute;
+            background: white;
+            border-radius: 20px;
+            padding: 20px 30px;
+            box-shadow: var(--shadow);
+            border: 3px solid var(--ui-color-2);
+            max-width: 250px;
+        }
+        
+        .bubble::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 15px solid transparent;
+        }
+        
+        .bubble.top-left {
+            top: 20%;
+            left: 15%;
+        }
+        
+        .bubble.top-right {
+            top: 20%;
+            right: 15%;
+        }
+        
+        .bubble.bottom-left {
+            bottom: 20%;
+            left: 15%;
+        }
+        
+        .bubble.bottom-right {
+            bottom: 20%;
+            right: 15%;
+        }
+        
+        /* 分割レイアウト */
+        .split-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        .left-section, .right-section {
+            padding: 40px;
+        }
+        
+        /* フロー・プロセス型 */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+        }
+        
+        .flow-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .flow-arrow {
+            font-size: 48px;
+            color: var(--ui-color-2);
+            animation: pulse 2s infinite;
+        }
+        
+        /* まとめスライド */
+        .summary-list {
+            list-style: none;
+            padding: 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .summary-item {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .summary-item:hover {
+            transform: translateX(10px);
+        }
+        
+        .summary-icon {
+            margin-right: 20px;
+            color: var(--ui-color-1);
+        }
+        
+        /* ナビゲーション */
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            background: var(--ui-color-1);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: var(--ui-color-2);
+            transform: scale(1.1);
+        }
+        
+        /* スライド番号 */
+        .slide-number {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            font-size: 24px;
+            color: var(--ui-color-1);
+            font-weight: bold;
+        }
+        
+        /* プログレスバー */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--ui-color-1);
+            transition: width 0.5s ease;
+        }
+        
+        /* アニメーション */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-30px); }
+            60% { transform: translateY(-15px); }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .slide-title { font-size: 36px; }
+            .main-message { font-size: 28px; }
+            .content-text { font-size: 18px; }
+            .fa-10x { font-size: 6em !important; }
+            .fa-8x { font-size: 5em !important; }
+            
+            .split-layout {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .flow-container {
+                flex-direction: column;
+            }
+            
+            .bubble {
+                position: static;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- プログレスバー -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    
+    <div class="slide-container">
+        <!-- スライド1: タイトル -->
+        <div class="slide active" id="slide1">
+            <div class="title-slide">
+                <i class="fa-solid fa-rocket fa-10x animated-icon"></i>
+                <h1 class="slide-title">プレゼンテーションタイトル</h1>
+                <p class="slide-subtitle">サブタイトル・キャッチコピー</p>
+                <div class="handwritten">
+                    <i class="fa-solid fa-calendar"></i> 2025年1月
+                </div>
+            </div>
+        </div>
+        
+        <!-- スライド2: アイコン中心型 -->
+        <div class="slide" id="slide2">
+            <div class="icon-centered">
+                <h2 class="main-message">メインメッセージ</h2>
+                <i class="fa-solid fa-lightbulb fa-8x main-icon"></i>
+                
+                <div class="bubble top-left">
+                    <p class="content-text">ポイント1</p>
+                </div>
+                <div class="bubble top-right">
+                    <p class="content-text">ポイント2</p>
+                </div>
+                <div class="bubble bottom-left">
+                    <p class="content-text">ポイント3</p>
+                </div>
+                <div class="bubble bottom-right">
+                    <p class="content-text">ポイント4</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- スライド3: 分割レイアウト -->
+        <div class="slide" id="slide3">
+            <div class="split-layout">
+                <div class="left-section">
+                    <i class="fa-solid fa-chart-line fa-7x" style="color: var(--ui-color-1);"></i>
+                    <h2 class="main-message">成果と実績</h2>
+                </div>
+                <div class="right-section">
+                    <ul class="content-text">
+                        <li><i class="fa-solid fa-check" style="color: var(--ui-color-2);"></i> 成果1の説明</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--ui-color-2);"></i> 成果2の説明</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--ui-color-2);"></i> 成果3の説明</li>
+                        <li><i class="fa-solid fa-check" style="color: var(--ui-color-2);"></i> 成果4の説明</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- スライド4: フロー・プロセス -->
+        <div class="slide" id="slide4">
+            <div>
+                <h2 class="main-message">実装プロセス</h2>
+                <div class="flow-container">
+                    <div class="flow-item">
+                        <i class="fa-solid fa-pencil fa-4x" style="color: var(--ui-color-1);"></i>
+                        <p class="content-text">企画</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-right flow-arrow"></i>
+                    <div class="flow-item">
+                        <i class="fa-solid fa-code fa-4x" style="color: var(--ui-color-1);"></i>
+                        <p class="content-text">開発</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-right flow-arrow"></i>
+                    <div class="flow-item">
+                        <i class="fa-solid fa-vial fa-4x" style="color: var(--ui-color-1);"></i>
+                        <p class="content-text">テスト</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-right flow-arrow"></i>
+                    <div class="flow-item">
+                        <i class="fa-solid fa-rocket fa-4x" style="color: var(--ui-color-1);"></i>
+                        <p class="content-text">リリース</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- スライド5: まとめ -->
+        <div class="slide" id="slide5">
+            <div>
+                <h2 class="main-message">まとめ & Next Action</h2>
+                <ul class="summary-list">
+                    <li class="summary-item">
+                        <i class="fa-solid fa-star fa-3x summary-icon"></i>
+                        <span class="content-text">重要ポイント1の説明</span>
+                    </li>
+                    <li class="summary-item">
+                        <i class="fa-solid fa-flag fa-3x summary-icon"></i>
+                        <span class="content-text">重要ポイント2の説明</span>
+                    </li>
+                    <li class="summary-item">
+                        <i class="fa-solid fa-bullseye fa-3x summary-icon"></i>
+                        <span class="content-text">重要ポイント3の説明</span>
+                    </li>
+                </ul>
+                <div class="handwritten" style="text-align: center; margin-top: 40px; font-size: 28px;">
+                    ありがとうございました！
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ナビゲーション -->
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button class="nav-btn" onclick="nextSlide()">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+    
+    <!-- スライド番号 -->
+    <div class="slide-number">
+        <span id="current-slide">1</span> / <span id="total-slides">5</span>
+    </div>
+    
+    <script>
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+        
+        // 初期設定
+        document.getElementById('total-slides').textContent = totalSlides;
+        updateProgress();
+        
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide;
+            updateProgress();
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide += 1);
+        }
+        
+        function previousSlide() {
+            showSlide(currentSlide -= 1);
+        }
+        
+        function updateProgress() {
+            const progressFill = document.getElementById('progress-fill');
+            const progress = (currentSlide / totalSlides) * 100;
+            progressFill.style.width = progress + '%';
+        }
+        
+        // キーボード操作
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+            if (e.key === 'Home') {
+                e.preventDefault();
+                currentSlide = 1;
+                showSlide(currentSlide);
+            }
+            if (e.key === 'End') {
+                e.preventDefault();
+                currentSlide = totalSlides;
+                showSlide(currentSlide);
+            }
+        });
+        
+        // タッチ操作（モバイル対応）
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) previousSlide();
+        }
+    </script>
+</body>
+</html>

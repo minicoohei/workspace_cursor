@@ -1,0 +1,21 @@
+{
+  "name": "sample-cursor-project-new",
+  "version": "2.0.0",
+  "description": "Cursor初心者向け学習プロジェクト",
+  "main": "index.js",
+  "scripts": {
+    "setup": "bash setup.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cursor",
+    "learning",
+    "japanese",
+    "beginner"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  }
+}
