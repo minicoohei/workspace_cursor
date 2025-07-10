@@ -18,15 +18,31 @@ const setupSteps = {
     ]
 };
 
-// セットアップガイドの内容
+// セットアップガイドの定義
 const setupGuides = {
     mac: {
         title: 'Mac セットアップ手順',
+        icon: '🍎',
         steps: [
             {
-                title: 'ターミナルを開く',
-                description: 'Spotlight検索（⌘+Space）で「Terminal」と入力して開きます。',
-                code: 'open -a Terminal'
+                title: 'Homebrewをインストール',
+                description: 'パッケージマネージャーのHomebrewをインストールします。',
+                code: '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+            },
+            {
+                title: 'Dockerをインストール',
+                description: 'Docker Desktop for Macをインストールします。',
+                code: 'brew install --cask docker'
+            },
+            {
+                title: 'Node.jsをインストール',
+                description: 'Node.js（LTS版）をインストールします。',
+                code: 'brew install node'
+            },
+            {
+                title: 'Pythonをインストール',
+                description: 'Python 3.11以上をインストールします。',
+                code: 'brew install python@3.11'
             },
             {
                 title: 'プロジェクトディレクトリに移動',
@@ -37,30 +53,32 @@ const setupGuides = {
                 title: '完全環境セットアップを実行',
                 description: 'すべての環境を自動構築します。',
                 code: 'bash setup_complete_environment.sh'
-            },
-            {
-                title: '環境変数を設定',
-                description: 'APIキーなどの設定を行います。',
-                code: 'cp config/env.local.template .env.local\n# .env.localを編集してAPIキーを設定'
-            },
-            {
-                title: 'Cursorでプロジェクトを開く',
-                description: 'セットアップ完了後、Cursorで開きます。',
-                code: 'cursor .'
             }
         ]
     },
     windows: {
         title: 'Windows セットアップ手順',
+        icon: '🪟',
         steps: [
             {
-                title: 'PowerShellを管理者として開く',
-                description: 'スタートメニューで「PowerShell」を右クリック→「管理者として実行」'
-            },
-            {
-                title: 'WSL2をインストール（推奨）',
+                title: 'WSL2をインストール',
                 description: 'Windows Subsystem for Linux 2をインストールします。',
                 code: 'wsl --install'
+            },
+            {
+                title: 'Docker Desktop for Windowsをインストール',
+                description: 'Docker Desktop for Windowsをインストールします。',
+                code: 'winget install Docker.DockerDesktop'
+            },
+            {
+                title: 'Node.jsをインストール',
+                description: 'Node.js（LTS版）をインストールします。',
+                code: 'winget install OpenJS.NodeJS'
+            },
+            {
+                title: 'Pythonをインストール',
+                description: 'Python 3.11以上をインストールします。',
+                code: 'winget install Python.Python.3.11'
             },
             {
                 title: 'プロジェクトディレクトリに移動',
@@ -69,27 +87,34 @@ const setupGuides = {
             },
             {
                 title: '完全環境セットアップを実行',
-                description: 'WSL内でセットアップスクリプトを実行します。',
+                description: 'すべての環境を自動構築します。',
                 code: 'bash setup_complete_environment.sh'
-            },
-            {
-                title: 'Cursorでプロジェクトを開く',
-                description: 'Windows側のCursorでWSL内のプロジェクトを開きます。',
-                code: 'cursor .'
             }
         ]
     },
     linux: {
         title: 'Linux セットアップ手順',
+        icon: '🐧',
         steps: [
             {
-                title: 'ターミナルを開く',
-                description: 'Ctrl+Alt+T でターミナルを開きます。'
+                title: 'パッケージマネージャーを更新',
+                description: 'システムのパッケージリストを更新します。',
+                code: 'sudo apt update && sudo apt upgrade -y'
             },
             {
-                title: '必要なパッケージをインストール',
-                description: 'Node.js、Docker等の必要なパッケージを確認します。',
-                code: 'sudo apt update && sudo apt install nodejs npm docker.io'
+                title: 'Dockerをインストール',
+                description: 'Docker Engine をインストールします。',
+                code: 'curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh'
+            },
+            {
+                title: 'Node.jsをインストール',
+                description: 'Node.js（LTS版）をインストールします。',
+                code: 'curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt-get install -y nodejs'
+            },
+            {
+                title: 'Pythonをインストール',
+                description: 'Python 3.11以上をインストールします。',
+                code: 'sudo apt install python3.11 python3.11-pip python3.11-venv -y'
             },
             {
                 title: 'プロジェクトディレクトリに移動',
@@ -100,11 +125,6 @@ const setupGuides = {
                 title: '完全環境セットアップを実行',
                 description: 'すべての環境を自動構築します。',
                 code: 'bash setup_complete_environment.sh'
-            },
-            {
-                title: 'Cursorでプロジェクトを開く',
-                description: 'セットアップ完了後、Cursorで開きます。',
-                code: 'cursor .'
             }
         ]
     }
@@ -124,34 +144,47 @@ const progressText = document.getElementById('progress-text');
 const progressSteps = document.getElementById('progress-steps');
 const nextStepsSection = document.getElementById('next-steps');
 
-// 完全セットアップボタンのイベント
-completeSetupBtn.addEventListener('click', () => {
-    startSetup('complete');
-});
-
-// 基本セットアップボタンのイベント
-basicSetupBtn.addEventListener('click', () => {
-    startSetup('basic');
-});
+// セットアップボタンのイベントリスナー
+completeSetupBtn.addEventListener('click', () => startSetup('complete'));
+basicSetupBtn.addEventListener('click', () => startSetup('basic'));
 
 // セットアップ開始
 function startSetup(type) {
-    progressSection.classList.remove('hidden');
-    terminalSection.classList.remove('hidden');
-    progressSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    
     // ボタンを無効化
     completeSetupBtn.disabled = true;
     basicSetupBtn.disabled = true;
     
-    // プログレスステップを表示
-    const steps = setupSteps[type];
-    let stepsHtml = '<div class="step-list">';
+    // プログレスセクションを表示
+    progressSection.classList.remove('hidden');
+    terminalSection.classList.remove('hidden');
+    
+    // プログレスセクションまでスクロール
+    progressSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    // セットアップステップを定義
+    const steps = type === 'complete' ? [
+        { id: 'basic', name: 'Cursor基本環境構築', progress: 10 },
+        { id: 'vscode', name: 'VSCode拡張機能インストール', progress: 25 },
+        { id: 'marp', name: 'Marp CLI環境構築', progress: 40 },
+        { id: 'python', name: 'Python・Jupyter環境構築', progress: 55 },
+        { id: 'env', name: '環境変数テンプレート作成', progress: 70 },
+        { id: 'git', name: 'Git hooks・セキュリティ設定', progress: 85 },
+        { id: 'mcp', name: 'MCPサーバー群インストール', progress: 100 }
+    ] : [
+        { id: 'indexing', name: 'Indexing Docs設定', progress: 30 },
+        { id: 'mcp-time', name: 'MCPタイムサーバー構築', progress: 70 },
+        { id: 'rules', name: 'Project Rules適用', progress: 100 }
+    ];
+    
+    // ステップ表示を作成
+    let stepsHtml = '<div class="steps-container">';
     steps.forEach(step => {
-        stepsHtml += `<div class="step-item" id="step-${step.id}">
-            <span class="step-icon">⏳</span>
-            <span class="step-name">${step.name}</span>
-        </div>`;
+        stepsHtml += `
+            <div class="step-item" id="step-${step.id}">
+                <span class="step-icon">⏳</span>
+                <span class="step-name">${step.name}</span>
+            </div>
+        `;
     });
     stepsHtml += '</div>';
     progressSteps.innerHTML = stepsHtml;
@@ -305,73 +338,74 @@ function showManualSetupWarning() {
 }
 
 // OS選択ボタンのイベントリスナー
-osButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        // アクティブクラスの切り替え
-        osButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
+document.querySelectorAll('.os-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const os = e.currentTarget.dataset.os;
         
-        // 選択されたOSのガイドを表示
-        const selectedOS = button.dataset.os;
-        showSetupGuide(selectedOS);
+        // すべてのボタンから active クラスを削除
+        document.querySelectorAll('.os-btn').forEach(b => b.classList.remove('active'));
+        
+        // クリックされたボタンに active クラスを追加
+        e.currentTarget.classList.add('active');
+        
+        // セットアップガイドを表示
+        showSetupGuide(os);
     });
 });
 
-// セットアップガイドの表示
+// セットアップガイドを表示
 function showSetupGuide(os) {
     const guide = setupGuides[os];
     
-    // ガイドコンテンツの生成
-    let html = `<h4>${guide.title}</h4><ol class="step-list">`;
+    let html = `
+        <div class="guide-header">
+            <span class="guide-icon">${guide.icon}</span>
+            <h4>${guide.title}</h4>
+        </div>
+        <div class="guide-steps">
+    `;
     
-    guide.steps.forEach(step => {
+    guide.steps.forEach((step, index) => {
         html += `
-            <li>
-                <h5>${step.title}</h5>
-                <p>${step.description}</p>
-                ${step.code ? `<div class="code-block"><code>${step.code}</code></div>` : ''}
-            </li>
+            <div class="guide-step">
+                <div class="step-number">${index + 1}</div>
+                <div class="step-content">
+                    <h5>${step.title}</h5>
+                    <p>${step.description}</p>
+                    <div class="code-block">
+                        <code>${step.code}</code>
+                        <button class="copy-btn" onclick="copyToClipboard('${step.code.replace(/'/g, "\\'")}')">
+                            📋 コピー
+                        </button>
+                    </div>
+                </div>
+            </div>
         `;
     });
     
-    html += '</ol>';
-    
-    // 追加の情報
-    html += `
-        <div class="info-box">
-            <h5>💡 ヒント</h5>
-            <ul>
-                <li>完全環境セットアップは5-10分程度かかります</li>
-                <li>エラーが発生した場合は、docs/setup/のガイドを参照</li>
-                <li>WSL2（Windows）やDocker Desktopが必要な場合があります</li>
-            </ul>
-        </div>
-    `;
+    html += '</div>';
     
     guideContent.innerHTML = html;
     setupGuideSection.classList.remove('hidden');
     setupGuideSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+// クリップボードにコピー
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        // 成功時の処理（必要に応じて）
+        console.log('コマンドをクリップボードにコピーしました');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+    });
+}
+
 // ページ読み込み時のアニメーション
 window.addEventListener('load', () => {
     document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity 0.5s ease-in-out';
+    
     setTimeout(() => {
-        document.body.style.transition = 'opacity 0.5s ease';
         document.body.style.opacity = '1';
     }, 100);
-});
-
-// コピーボタン機能の追加
-document.addEventListener('click', (e) => {
-    if (e.target.tagName === 'CODE' && e.target.parentElement.classList.contains('code-block')) {
-        const text = e.target.textContent;
-        navigator.clipboard.writeText(text).then(() => {
-            const originalText = e.target.textContent;
-            e.target.textContent = '✅ コピーしました！';
-            setTimeout(() => {
-                e.target.textContent = originalText;
-            }, 2000);
-        });
-    }
 }); 
