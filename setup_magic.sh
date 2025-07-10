@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # 🎯 SampleCursorProject_NEW - 魔法のセットアップスクリプト
-# CursorRulesから自動起動対応
+# CursorRulesから自動起動対応 + 完全環境構築
+
+set -e
 
 echo "🎯 =================================================="
 echo "✨ Cursor環境セットアップを開始します"
@@ -44,7 +46,7 @@ fi
 
 echo ""
 
-# Node.jsの確認
+# Node.jsの確認とインストール
 echo "🔍 Node.js環境をチェック中..."
 
 if ! command -v node &> /dev/null; then
@@ -136,7 +138,128 @@ NPM_VERSION=$(npm --version)
 echo "✅ npm $NPM_VERSION が利用可能です"
 echo ""
 
-# package.jsonの自動生成
+# 1. 基本Cursor環境のセットアップ
+echo "📦 基本Cursor環境をセットアップ中..."
+if [ -f "setup_cursor_environment.sh" ]; then
+    bash setup_cursor_environment.sh
+else
+    echo "⚠️  setup_cursor_environment.sh が見つかりません"
+    echo "🔧 基本設定を手動で実行します..."
+    
+    # Cursor設定ディレクトリの作成
+    if [ ! -d ".cursor" ]; then
+        mkdir -p .cursor/rules
+        echo "✅ .cursorディレクトリを作成しました"
+    fi
+    
+    # mcp.jsonの作成
+    cat > .cursor/mcp.json << 'EOF'
+{
+  "mcpServers": {
+    "mcp-time": {
+      "command": "docker",
+      "args": ["compose", "-f", "mcp-time/docker-compose.yml", "up"],
+      "env": {},
+      "description": "日本時間のタイムスタンプを提供するMCPサーバー",
+      "autoStart": true
+    }
+  }
+}
+EOF
+    echo "✅ MCPサーバー設定を作成しました"
+fi
+
+# 2. VSCode拡張機能のインストール
+echo "🔧 VSCode拡張機能をインストール中..."
+if command -v code &> /dev/null; then
+    # Marp関連
+    code --install-extension marp-team.marp-vscode
+    
+    # Markdown関連
+    code --install-extension yzhang.markdown-all-in-one
+    code --install-extension bierner.markdown-mermaid
+    
+    # 日本語サポート
+    code --install-extension MS-CEINTL.vscode-language-pack-ja
+    
+    # Git関連
+    code --install-extension eamodio.gitlens
+    
+    # Python/Jupyter
+    code --install-extension ms-python.python
+    code --install-extension ms-toolsai.jupyter
+    
+    # 開発支援
+    code --install-extension esbenp.prettier-vscode
+    code --install-extension dbaeumer.vscode-eslint
+    
+    echo "✅ VSCode拡張機能のインストール完了"
+else
+    echo "⚠️  VSCodeコマンドが見つかりません。手動でインストールしてください"
+fi
+
+# 3. Marp CLIのインストール
+echo "📊 Marp CLIをインストール中..."
+npm install -g @marp-team/marp-cli
+echo "✅ Marp CLIのインストール完了"
+
+# Marp設定ファイルをホームディレクトリにコピー
+if [ -f "config/.marprc.yml" ]; then
+    cp config/.marprc.yml ~/.marprc.yml
+    echo "✅ Marp設定ファイルをコピーしました"
+fi
+
+# 4. Python環境のセットアップ（Jupyter用）
+echo "🐍 Python環境をセットアップ中..."
+if command -v python3 &> /dev/null; then
+    # 仮想環境の作成
+    if [ ! -d "env" ]; then
+        python3 -m venv env
+        echo "✅ Python仮想環境を作成しました"
+    fi
+    
+    # 仮想環境をアクティベートして必要なパッケージをインストール
+    source env/bin/activate
+    pip install --upgrade pip
+    pip install jupyter notebook ipykernel pandas numpy matplotlib seaborn
+    
+    # Jupyterカーネルを登録
+    python -m ipykernel install --user --name=cursor_project --display-name="Cursor Project"
+    
+    deactivate
+    echo "✅ Python環境のセットアップ完了"
+else
+    echo "⚠️  Python3が見つかりません"
+fi
+
+# 5. 環境変数テンプレートの設定
+echo "🔐 環境変数テンプレートを設定中..."
+if [ -f "config/env.local.template" ] && [ ! -f ".env.local" ]; then
+    cp config/env.local.template .env.local
+    echo "✅ .env.localファイルを作成しました"
+    echo "⚠️  APIキーを設定してください: .env.local"
+fi
+
+# 6. MCPサーバーの追加設定
+echo "🌐 MCPサーバーの追加設定中..."
+
+# 必要なMCPサーバーがインストールされているか確認
+echo "📦 必要なMCPサーバーをインストール中..."
+
+# npmでインストール可能なMCPサーバー
+npm_servers=(
+    "@modelcontextprotocol/server-filesystem"
+    "@modelcontextprotocol/server-github"
+)
+
+for server in "${npm_servers[@]}"; do
+    echo "  - $server をインストール中..."
+    npm install -g "$server" || echo "    ⚠️  $server のインストールに失敗しました"
+done
+
+echo "✅ MCPサーバーのインストール完了"
+
+# 7. package.jsonの自動生成（Webサーバー用）
 if [ ! -f "package.json" ]; then
     echo "📦 package.jsonを生成中..."
     cat > package.json << 'EOF'
@@ -169,7 +292,7 @@ fi
 
 echo ""
 
-# 依存関係のインストール
+# 8. 依存関係のインストール
 echo "📦 必要なパッケージをインストール中..."
 
 npm install --silent
@@ -189,7 +312,40 @@ fi
 echo "✅ パッケージのインストール完了"
 echo ""
 
-# ポートチェック
+# 9. Docker環境の確認とMCPサーバー起動
+echo "🐳 Docker環境を確認中..."
+
+if command -v docker &> /dev/null; then
+    echo "✅ Dockerがインストールされています"
+    
+    # Docker Composeの確認
+    if docker compose version &> /dev/null || docker-compose --version &> /dev/null; then
+        echo "✅ Docker Composeが利用可能です"
+        
+        # MCPタイムサーバーのビルドと起動
+        echo "🔨 MCPタイムサーバーをビルド・起動中..."
+        cd mcp-time
+        if docker compose build &> /dev/null; then
+            echo "✅ MCPタイムサーバーのビルドが完了しました"
+            
+            # バックグラウンドで起動
+            docker compose up -d
+            echo "✅ MCPタイムサーバーを起動しました"
+        else
+            echo "⚠️  MCPタイムサーバーのビルドに失敗しました"
+        fi
+        cd ..
+    else
+        echo "⚠️  Docker Composeがインストールされていません"
+        echo "  MCPサーバーを使用するにはDocker Composeが必要です"
+    fi
+else
+    echo "⚠️  Dockerがインストールされていません"
+    echo "  MCPサーバーを使用するにはDockerが必要です"
+    echo "  インストール方法: https://docs.docker.com/get-docker/"
+fi
+
+# 10. ポートチェック
 echo "🔍 ポート3000をチェック中..."
 if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then
     echo "🔄 ポート3000で実行中のプロセスを終了します"
@@ -218,9 +374,19 @@ echo ""
 
 # 完了メッセージ
 echo "🎊 =========================================="
-echo "✨ Cursorセットアップツールの準備完了！"
-echo "🌟 これから快適な開発環境をお楽しみください"
-echo "🤝 何か問題があれば、いつでもこのスクリプトを実行してください"
+echo "✨ Cursor完全環境セットアップ完了！"
+echo "🌟 以下の機能が利用可能になりました："
+echo "   ✅ Cursor IDE設定"
+echo "   ✅ MCPサーバー（mcp-time）"
+echo "   ✅ VSCode拡張機能"
+echo "   ✅ Marp CLI"
+echo "   ✅ Python/Jupyter環境"
+echo "   ✅ Webセットアップインターフェース"
+echo ""
+echo "📋 次のステップ:"
+echo "1. Cursorを再起動してください"
+echo "2. .env.localにAPIキーを設定してください"
+echo "3. samples/ディレクトリでサンプルを確認してください"
 echo "🎊 =========================================="
 echo ""
 
