@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "documents": [
+    {
+      "name": "プロジェクト概要",
+      "path": "README.md",
+      "description": "SampleCursorProject_NEWの全体概要"
+    },
+    {
+      "name": "Cursor初心者ガイド",
+      "path": "cursor_beginner_guide.md",
+      "description": "Cursor AIの基本的な使い方"
+    },
+    {
+      "name": "安全ガイドライン",
+      "path": "安全ガイドライン.md",
+      "description": "初心者向けの安全な操作ガイド"
+    },
+    {
+      "name": "議事録テンプレート",
+      "path": "ObsidianVault/Templates/0002_議事録作成テンプレート.md",
+      "description": "議事録作成の標準テンプレート"
+    },
+    {
+      "name": "Marp作成ガイド",
+      "path": "CursorCourse/Chapter1_Documentation/marp_creation_guide.md",
+      "description": "Marpスライドの作成方法"
+    },
+    {
+      "name": "要件定義ガイドライン",
+      "path": "ObsidianVault/Templates/0003_要件定義ガイドライン.md",
+      "description": "要件定義書の作成ガイド"
+    },
+    {
+      "name": "MCPタイムサーバー",
+      "path": "mcp-time/README.md",
+      "description": "タイムスタンプ提供MCPサーバー"
+    }
+  ]
+}

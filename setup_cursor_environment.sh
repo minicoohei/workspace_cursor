@@ -95,28 +95,29 @@ echo -e "${GREEN}✓ Indexing Docs設定を作成しました${NC}"
 echo ""
 echo "🔧 MCPサーバー設定を構成中..."
 
-# mcp.jsonが既に存在する場合はバックアップ
+# mcp.jsonの確認と設定
 if [ -f ".cursor/mcp.json" ]; then
-    cp .cursor/mcp.json .cursor/mcp.json.backup
-    echo -e "${YELLOW}! 既存のmcp.jsonをバックアップしました${NC}"
-fi
-
-# mcp.jsonの作成
-cat > .cursor/mcp.json << 'EOF'
+    echo -e "${GREEN}✓ 既存のMCPサーバー設定を保持します${NC}"
+    echo -e "${YELLOW}! 既存の設定: $(jq -r '.mcpServers | keys | join(", ")' .cursor/mcp.json 2>/dev/null || echo "設定確認エラー")${NC}"
+else
+    echo -e "${YELLOW}! mcp.jsonが存在しません。基本設定を作成します${NC}"
+    
+    # 基本的なmcp-timeサーバーのみ作成
+    cat > .cursor/mcp.json << 'EOF'
 {
   "mcpServers": {
     "mcp-time": {
-      "command": "docker",
-      "args": ["compose", "-f", "mcp-time/docker-compose.yml", "up"],
+      "command": "bash",
+      "args": ["scripts/start-mcp-time.sh"],
       "env": {},
-      "description": "日本時間のタイムスタンプを提供するMCPサーバー",
+      "description": "日本時間のタイムスタンプを提供するMCPサーバー（Docker/Python自動選択）",
       "autoStart": true
     }
   }
 }
 EOF
-
-echo -e "${GREEN}✓ MCPサーバー設定を作成しました${NC}"
+    echo -e "${GREEN}✓ 基本MCPサーバー設定を作成しました${NC}"
+fi
 
 # ========================================
 # 4. Project Rules設定
