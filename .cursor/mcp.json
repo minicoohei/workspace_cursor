@@ -6,38 +6,6 @@
       "env": {},
       "description": "日本時間のタイムスタンプを提供するMCPサーバー",
       "autoStart": true
-    },
-    "filesystem": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/Users/kou1904/Documents"
-      ],
-      "description": "ファイルシステム操作用MCPサーバー"
-    },
-    "github": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-github"
-      ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
-      },
-      "description": "GitHub連携用MCPサーバー"
-    },
-    "figma-developer-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "figma-developer-mcp",
-        "--stdio"
-      ],
-      "env": {
-        "FIGMA_API_KEY": "${FIGMA_ACCESS_TOKEN}"
-      },
-      "description": "Figmaデザイン連携用MCPサーバー"
     }
   }
 } 
