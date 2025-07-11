@@ -1,4 +1,4 @@
-# 🎯 SampleCursorProject_NEW
+# 🎯 Sample WorkPlace Project
 
 Cursor初心者向けの包括的な学習・セットアップ環境
 
