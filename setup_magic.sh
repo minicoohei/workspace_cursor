@@ -1,4 +1,4 @@
-THIS SHOULD BE A LINTER ERROR#!/bin/bash
+#!/bin/bash
 
 # 🎯 魔法のセットアップスクリプト - Webサーバー起動専用
 # CursorRulesから自動起動対応
@@ -123,10 +123,37 @@ if ! command -v node &> /dev/null; then
             echo "🐧 LinuxパッケージマネージャーでNode.jsをインストールします"
             if command -v apt &> /dev/null; then
                 echo "📦 Ubuntu/Debian用パッケージを使用"
-                if ! curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -; then
-                    echo "❌ NodeSourceリポジトリの追加に失敗しました"
+                echo "⚠️  外部リポジトリからパッケージをインストールします。続行しますか？ (y/N)"
+                read -n 1 -r REPLY
+                echo ""
+                if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                    echo "インストールを中止しました"
+                    echo "💡 手動でNode.jsをインストールしてください: https://nodejs.org/"
                     exit 1
                 fi
+                
+                NODE_SETUP_SCRIPT="/tmp/node_setup_$$"
+                echo "🔒 NodeSourceセットアップスクリプトをダウンロード中..."
+                if ! curl -fsSL https://deb.nodesource.com/setup_lts.x -o "$NODE_SETUP_SCRIPT"; then
+                    echo "❌ NodeSourceスクリプトのダウンロードに失敗しました"
+                    echo "💡 手動でNode.jsをインストールしてください: https://nodejs.org/"
+                    exit 1
+                fi
+                
+                # ファイルの基本的な検証
+                if [ ! -s "$NODE_SETUP_SCRIPT" ]; then
+                    echo "❌ ダウンロードしたスクリプトが空です"
+                    rm -f "$NODE_SETUP_SCRIPT"
+                    exit 1
+                fi
+                
+                if ! sudo -E bash "$NODE_SETUP_SCRIPT"; then
+                    echo "❌ NodeSourceリポジトリの追加に失敗しました"
+                    rm -f "$NODE_SETUP_SCRIPT"
+                    exit 1
+                fi
+                
+                rm -f "$NODE_SETUP_SCRIPT"
                 if ! sudo apt-get install -y nodejs; then
                     echo "❌ Node.jsのインストールに失敗しました"
                     exit 1
