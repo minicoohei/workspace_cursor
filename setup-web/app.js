@@ -320,20 +320,45 @@ function handleSetupProgress(data, steps, currentStepIndex) {
     }
 }
 
-// 手動セットアップ警告の表示
+// 手動セットアップ警告の表示（XSS対策版）
 function showManualSetupWarning() {
     const warningDiv = document.createElement('div');
     warningDiv.className = 'warning-box';
-    warningDiv.innerHTML = `
-        <h4>⚠️ 手動セットアップが必要です</h4>
-        <p>自動セットアップサーバーが利用できません。下記の手順で手動セットアップを実行してください：</p>
-        <ol>
-            <li>ターミナルを開く</li>
-            <li>プロジェクトディレクトリに移動: <code>cd ~/Documents/WorkSpace/work_space</code></li>
-            <li>セットアップスクリプトを実行: <code>bash setup_complete_environment.sh</code></li>
-        </ol>
-        <p>詳細な手順は下記の「手動セットアップ」セクションを参照してください。</p>
-    `;
+    
+    const title = document.createElement('h4');
+    title.textContent = '⚠️ 手動セットアップが必要です';
+    
+    const description = document.createElement('p');
+    description.textContent = '自動セットアップサーバーが利用できません。下記の手順で手動セットアップを実行してください：';
+    
+    const steps = document.createElement('ol');
+    
+    const step1 = document.createElement('li');
+    step1.textContent = 'ターミナルを開く';
+    
+    const step2 = document.createElement('li');
+    step2.textContent = 'プロジェクトディレクトリに移動: ';
+    const code1 = document.createElement('code');
+    code1.textContent = 'cd ~/Documents/WorkSpace/work_space';
+    step2.appendChild(code1);
+    
+    const step3 = document.createElement('li');
+    step3.textContent = 'セットアップスクリプトを実行: ';
+    const code2 = document.createElement('code');
+    code2.textContent = 'bash setup_complete_environment.sh';
+    step3.appendChild(code2);
+    
+    steps.appendChild(step1);
+    steps.appendChild(step2);
+    steps.appendChild(step3);
+    
+    const footer = document.createElement('p');
+    footer.textContent = '詳細な手順は下記の「手動セットアップ」セクションを参照してください。';
+    
+    warningDiv.appendChild(title);
+    warningDiv.appendChild(description);
+    warningDiv.appendChild(steps);
+    warningDiv.appendChild(footer);
     
     progressSection.appendChild(warningDiv);
 }
@@ -354,51 +379,111 @@ document.querySelectorAll('.os-btn').forEach(btn => {
     });
 });
 
-// セットアップガイドを表示
+// セットアップガイドを表示（XSS対策版）
 function showSetupGuide(os) {
     const guide = setupGuides[os];
     
-    let html = `
-        <div class="guide-header">
-            <span class="guide-icon">${guide.icon}</span>
-            <h4>${guide.title}</h4>
-        </div>
-        <div class="guide-steps">
-    `;
+    // 既存のコンテンツをクリア
+    guideContent.innerHTML = '';
+    
+    // ガイドヘッダーを作成
+    const header = document.createElement('div');
+    header.className = 'guide-header';
+    
+    const icon = document.createElement('span');
+    icon.className = 'guide-icon';
+    icon.textContent = guide.icon;
+    
+    const title = document.createElement('h4');
+    title.textContent = guide.title;
+    
+    header.appendChild(icon);
+    header.appendChild(title);
+    
+    // ガイドステップコンテナを作成
+    const stepsContainer = document.createElement('div');
+    stepsContainer.className = 'guide-steps';
     
     guide.steps.forEach((step, index) => {
-        html += `
-            <div class="guide-step">
-                <div class="step-number">${index + 1}</div>
-                <div class="step-content">
-                    <h5>${step.title}</h5>
-                    <p>${step.description}</p>
-                    <div class="code-block">
-                        <code>${step.code}</code>
-                        <button class="copy-btn" onclick="copyToClipboard('${step.code.replace(/'/g, "\\'")}')">
-                            📋 コピー
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
+        const stepDiv = document.createElement('div');
+        stepDiv.className = 'guide-step';
+        
+        // ステップ番号
+        const stepNumber = document.createElement('div');
+        stepNumber.className = 'step-number';
+        stepNumber.textContent = index + 1;
+        
+        // ステップコンテンツ
+        const stepContent = document.createElement('div');
+        stepContent.className = 'step-content';
+        
+        const stepTitle = document.createElement('h5');
+        stepTitle.textContent = step.title;
+        
+        const stepDescription = document.createElement('p');
+        stepDescription.textContent = step.description;
+        
+        // コードブロック
+        const codeBlock = document.createElement('div');
+        codeBlock.className = 'code-block';
+        
+        const code = document.createElement('code');
+        code.textContent = step.code;
+        
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = '📋 コピー';
+        copyBtn.addEventListener('click', () => copyToClipboard(step.code));
+        
+        codeBlock.appendChild(code);
+        codeBlock.appendChild(copyBtn);
+        
+        stepContent.appendChild(stepTitle);
+        stepContent.appendChild(stepDescription);
+        stepContent.appendChild(codeBlock);
+        
+        stepDiv.appendChild(stepNumber);
+        stepDiv.appendChild(stepContent);
+        
+        stepsContainer.appendChild(stepDiv);
     });
     
-    html += '</div>';
+    guideContent.appendChild(header);
+    guideContent.appendChild(stepsContainer);
     
-    guideContent.innerHTML = html;
     setupGuideSection.classList.remove('hidden');
     setupGuideSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// クリップボードにコピー
+// クリップボードにコピー（XSS対策）
 function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        // 成功時の処理（必要に応じて）
+    // 入力値のサニタイズ
+    const sanitizedText = text.replace(/[<>&"']/g, (match) => {
+        const map = {
+            '<': '&lt;',
+            '>': '&gt;',
+            '&': '&amp;',
+            '"': '&quot;',
+            "'": '&#39;'
+        };
+        return map[match];
+    });
+    
+    navigator.clipboard.writeText(sanitizedText).then(() => {
         console.log('コマンドをクリップボードにコピーしました');
     }).catch(err => {
         console.error('クリップボードへのコピーに失敗しました:', err);
     });
+}
+
+// DOM要素の安全な作成（XSS対策）
+function createSafeElement(tag, textContent, className = null) {
+    const element = document.createElement(tag);
+    element.textContent = textContent;
+    if (className) {
+        element.className = className;
+    }
+    return element;
 }
 
 // ページ読み込み時のアニメーション

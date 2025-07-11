@@ -6,6 +6,17 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// セキュリティヘッダーの設定
+app.use((req, res, next) => {
+    res.setHeader('Content-Security-Policy', 
+        "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'");
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    next();
+});
+
 // 静的ファイルの提供
 app.use(express.static(__dirname));
 
@@ -21,18 +32,18 @@ app.get('/api/health', (req, res) => {
 app.post('/api/execute-setup', (req, res) => {
     const { script, type } = req.body;
     
-    // セキュリティチェック: 許可されたスクリプトのみ実行
-    const allowedScripts = [
-        'setup_complete_environment.sh',
-        'setup_cursor_environment.sh'
-    ];
+    // セキュリティチェック: 許可されたスクリプトのみ実行（パストラバーサル対策）
+    const ALLOWED_SCRIPTS = {
+        'setup_complete_environment.sh': path.join(__dirname, '..', 'setup_complete_environment.sh'),
+        'setup_cursor_environment.sh': path.join(__dirname, '..', 'setup_cursor_environment.sh')
+    };
     
-    if (!allowedScripts.includes(script)) {
+    if (!ALLOWED_SCRIPTS[script]) {
         return res.status(400).json({ error: 'Unauthorized script' });
     }
     
-    // スクリプトのパスを構築
-    const scriptPath = path.join(__dirname, '..', script);
+    // 事前検証済みの安全なパスを使用
+    const scriptPath = ALLOWED_SCRIPTS[script];
     
     // スクリプトファイルの存在チェック
     if (!fs.existsSync(scriptPath)) {
@@ -102,9 +113,10 @@ app.post('/api/execute-setup', (req, res) => {
     
     // エラーハンドリング
     child.on('error', (error) => {
+        console.error('Script execution error:', error); // サーバーログに記録
         res.write(JSON.stringify({
             type: 'error',
-            message: `実行エラー: ${error.message}`
+            message: 'スクリプトの実行中にエラーが発生しました'
         }) + '\n');
         res.end();
     });
