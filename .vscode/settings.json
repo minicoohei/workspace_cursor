@@ -15,7 +15,19 @@
   "markdown.marp.chromePath": "",
   "terminal.integrated.defaultProfile.osx": "zsh",
   "terminal.integrated.defaultProfile.linux": "bash",
-  "terminal.integrated.defaultProfile.windows": "powershell",
+  "terminal.integrated.defaultProfile.windows": "WSL",
+  "terminal.integrated.profiles.windows": {
+    "WSL": {
+      "path": "wsl.exe",
+      "args": [],
+      "icon": "terminal-linux"
+    },
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    }
+  },
+  "remote.WSL.fileWatcher.polling": true,
   "git.autofetch": true,
   "git.confirmSync": false,
   "files.exclude": {

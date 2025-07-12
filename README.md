@@ -37,7 +37,7 @@ npm run magic
 - **🌐 Webインターフェース**: ブラウザで直感的にセットアップ
 - **📚 学習コンテンツ**: Cursor使い方からMarp、Jupyter環境まで
 - **🛡️ 安全性重視**: 初心者向け安全ガイドライン内蔵
-- **📱 クロスプラットフォーム**: Mac/Linux/Windows対応
+- **📱 クロスプラットフォーム**: Mac/Linux/Windows/WSL2対応
 
 ## 📁 プロジェクト構成
 
@@ -81,7 +81,7 @@ work_space/
 - **Node.js**: サーバーサイド実行環境
 - **Express**: Webサーバーフレームワーク
 - **MCP Protocol**: Model Context Protocol対応
-- **Multi-OS**: Mac/Linux/Windows対応
+- **Multi-OS**: Mac/Linux/Windows/WSL2対応
 
 ## 📋 使用例
 
@@ -107,6 +107,7 @@ npm run setup
 ## 📚 ドキュメント
 
 - [魔法のセットアップガイド](MAGIC_SETUP.md) - CursorRules自動起動詳細
+- [WSL2 + Cursor 完全ガイド](docs/WSL2_CURSOR_GUIDE.md) - Windows環境での最適使用法
 - [セットアップガイド](docs/setup/) - 従来の手動セットアップ
 - [安全ガイドライン](安全ガイドライン.md) - 初心者向け安全対策
 - [テンプレート一覧](ObsidianVault/Templates/README_テンプレート一覧.md) - 利用可能テンプレート

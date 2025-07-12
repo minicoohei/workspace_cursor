@@ -28,15 +28,26 @@ echo ""
 
 # OSの検出
 OS_TYPE=""
+WSL_DETECTED=""
 if [[ "$OSTYPE" == "darwin"* ]]; then
     OS_TYPE="mac"
     echo "🍎 Mac環境を検出しました"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    OS_TYPE="linux"
-    echo "🐧 Linux環境を検出しました"
+    # WSL2の検出
+    if grep -q "microsoft" /proc/version 2>/dev/null; then
+        WSL_DETECTED="true"
+        OS_TYPE="wsl"
+        echo "🪟🐧 WSL2（Windows Subsystem for Linux）環境を検出しました"
+        echo "✅ 最適な開発環境です！"
+    else
+        OS_TYPE="linux"
+        echo "🐧 Linux環境を検出しました"
+    fi
 elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
     OS_TYPE="windows"
     echo "🪟 Windows環境を検出しました"
+    echo "💡 WSL2の使用を強く推奨します！"
+    echo "📖 詳細: docs/WSL2_CURSOR_GUIDE.md"
 else
     echo "⚠️  未知のOS環境です。Macとして処理を続行します"
     OS_TYPE="mac"
@@ -81,8 +92,14 @@ if ! command -v node &> /dev/null; then
             fi
             ;;
             
-        "linux")
-            echo "🐧 LinuxパッケージマネージャーでNode.jsをインストールします"
+                    "linux"|"wsl")
+            if [[ "$WSL_DETECTED" == "true" ]]; then
+                echo "🪟🐧 WSL2環境でNode.jsをインストールします"
+                echo "✅ 最適化されたインストール手順を使用"
+            else
+                echo "🐧 LinuxパッケージマネージャーでNode.jsをインストールします"
+            fi
+            
             if command -v apt &> /dev/null; then
                 echo "📦 Ubuntu/Debian用パッケージを使用"
                 if ! curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -; then
@@ -195,6 +212,14 @@ case $OS_TYPE in
             xdg-open "http://localhost:3000" 2>/dev/null &
         fi
         ;;
+    "wsl")
+        # WSL2の場合、Windowsのブラウザを開く
+        if command -v cmd.exe &> /dev/null; then
+            cmd.exe /c start "http://localhost:3000" 2>/dev/null &
+        elif command -v powershell.exe &> /dev/null; then
+            powershell.exe -c "Start-Process 'http://localhost:3000'" 2>/dev/null &
+        fi
+        ;;
     "windows")
         if command -v start &> /dev/null; then
             start "http://localhost:3000" 2>/dev/null &
@@ -222,5 +247,15 @@ fi
 echo ""
 echo "👋 お疲れさまでした！"
 echo "🎯 Webブラウザでセットアップを続行してください"
+
+if [[ "$WSL_DETECTED" == "true" ]]; then
+    echo ""
+    echo "🪟🐧 WSL2環境での開発Tips:"
+    echo "   📁 プロジェクトパス: $(pwd)"
+    echo "   🌐 ブラウザ: Windowsブラウザが自動で開きます"
+    echo "   📖 詳細ガイド: docs/WSL2_CURSOR_GUIDE.md"
+    echo "   💡 CursorでWSL2ターミナルを開いて作業してください"
+fi
+
 echo "🌟 良い開発ライフをお過ごしください！"
 echo "🤝 ありがとうございました" 
