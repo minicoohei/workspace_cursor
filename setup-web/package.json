@@ -1,0 +1,16 @@
+{
+  "name": "setup-web-tool",
+  "version": "1.0.0",
+  "description": "Cursor環境セットアップWebツール",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "keywords": ["cursor", "setup", "development"],
+  "author": "SampleCursorProject_NEW",
+  "license": "MIT"
+}

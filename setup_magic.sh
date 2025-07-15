@@ -124,12 +124,9 @@ if ! command -v node &> /dev/null; then
             echo "🍫 Chocolateyがある場合:"
             echo "   choco install nodejs"
             echo ""
-            read -p "Node.jsをインストールしましたか？ (y/N): " -n 1 -r
-            echo ""
-            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-                echo "💡 Node.jsをインストール後、再度実行してください"
-                exit 1
-            fi
+            echo "❌ Node.jsが見つかりません"
+            echo "💡 Node.jsをインストール後、再度実行してください"
+            exit 1
             ;;
     esac
 else
