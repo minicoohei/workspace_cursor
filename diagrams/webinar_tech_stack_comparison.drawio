@@ -1,0 +1,140 @@
+<mxfile host="app.diagrams.net" modified="2025-07-16T02:21:26.000Z" agent="5.0" etag="example" version="24.7.16">
+  <diagram name="技術スタック比較" id="tech-stack-comparison">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- タイトル -->
+        <mxCell id="title" value="webinarセミナー用技術スタック比較表" style="text;fontSize=24;fontStyle=1;fillColor=#e1f5fe;strokeColor=#01579b;align=center;" vertex="1" parent="1">
+          <mxGeometry x="200" y="40" width="600" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- 静的HTML列 -->
+        <mxCell id="static-html-header" value="(1) 静的HTML" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#01579b;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="120" width="200" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="static-html-subtitle" value="特定の機能に特化したWebツール" style="text;fontSize=12;fillColor=#f0f8ff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="120" y="160" width="200" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- AIやAPIアプリ列 -->
+        <mxCell id="ai-app-header" value="(2) AIやAPIのみを使うアプリケーション" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#4a148c;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="120" width="200" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ai-app-subtitle" value="web画面にこだわりがない、機能重視" style="text;fontSize=12;fillColor=#faf2ff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="360" y="160" width="200" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- ログイン/認証/DB列 -->
+        <mxCell id="auth-db-header" value="(3) ログイン/認証/DBが必要なアプリ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e8;strokeColor=#2e7d32;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="120" width="200" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="auth-db-subtitle" value="本格的なWebアプリケーション" style="text;fontSize=12;fillColor=#f1f8e9;align=center;" vertex="1" parent="1">
+          <mxGeometry x="600" y="160" width="200" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- 技術スタック詳細 -->
+        <mxCell id="tech-stack-label" value="推奨技術スタック" style="text;fontSize=14;fontStyle=1;fillColor=#fff3e0;strokeColor=#f57c00;align=center;" vertex="1" parent="1">
+          <mxGeometry x="20" y="200" width="120" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- 静的HTML技術スタック -->
+        <mxCell id="static-tech" value="• Vanilla JS + Vite&#xa;• localStorage / IndexedDB&#xa;• Netlify / Vercel&#xa;• Tailwind CSS&#xa;• 認証不要" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#01579b;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="120" y="200" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- AIやAPI技術スタック -->
+        <mxCell id="ai-tech" value="• Streamlit (Python)&#xa;• FastAPI (Python)&#xa;• PostgreSQL + pgvector&#xa;• Render / Railway&#xa;• Streamlit Auth" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#4a148c;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="360" y="200" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- ログイン/認証/DB技術スタック -->
+        <mxCell id="auth-db-tech" value="• Next.js + TypeScript&#xa;• Next.js API Routes&#xa;• PostgreSQL (Supabase)&#xa;• Vercel&#xa;• Supabase Auth + Stripe" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e8;strokeColor=#2e7d32;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="600" y="200" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- 特徴評価 -->
+        <mxCell id="evaluation-label" value="特徴評価" style="text;fontSize=14;fontStyle=1;fillColor=#fff3e0;strokeColor=#f57c00;align=center;" vertex="1" parent="1">
+          <mxGeometry x="20" y="320" width="120" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- 静的HTML評価 -->
+        <mxCell id="static-eval" value="学習コスト: 低&#xa;開発速度: 高&#xa;拡張性: 中&#xa;運用コスト: 低" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#01579b;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="120" y="320" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- AIやAPI評価 -->
+        <mxCell id="ai-eval" value="学習コスト: 低&#xa;開発速度: 高&#xa;拡張性: 中&#xa;運用コスト: 中" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#4a148c;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="360" y="320" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- ログイン/認証/DB評価 -->
+        <mxCell id="auth-db-eval" value="学習コスト: 高&#xa;開発速度: 中&#xa;拡張性: 高&#xa;運用コスト: 中" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e8;strokeColor=#2e7d32;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="600" y="320" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- 適用例 -->
+        <mxCell id="examples-label" value="適用例" style="text;fontSize=14;fontStyle=1;fillColor=#fff3e0;strokeColor=#f57c00;align=center;" vertex="1" parent="1">
+          <mxGeometry x="20" y="420" width="120" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- 静的HTML適用例 -->
+        <mxCell id="static-examples" value="• 画像変換ツール&#xa;• 計算機&#xa;• ジェネレーター&#xa;• API検証ツール" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#01579b;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="120" y="420" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- AIやAPI適用例 -->
+        <mxCell id="ai-examples" value="• チャットボット&#xa;• 画像生成ツール&#xa;• 文章校正ツール&#xa;• データ分析ダッシュボード" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#4a148c;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="360" y="420" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- ログイン/認証/DB適用例 -->
+        <mxCell id="auth-db-examples" value="• ユーザー管理システム&#xa;• タスク管理アプリ&#xa;• ブログ・CMS&#xa;• SaaS アプリケーション" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e8;strokeColor=#2e7d32;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="600" y="420" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- 選択基準 -->
+        <mxCell id="criteria-label" value="選択基準" style="text;fontSize=14;fontStyle=1;fillColor=#fff3e0;strokeColor=#f57c00;align=center;" vertex="1" parent="1">
+          <mxGeometry x="20" y="520" width="120" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- 静的HTML選択基準 -->
+        <mxCell id="static-criteria" value="✓ シンプルなツール&#xa;✓ ローカルストレージで十分&#xa;✓ 認証不要&#xa;✓ UI/UXシンプルで十分" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#01579b;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="120" y="520" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- AIやAPI選択基準 -->
+        <mxCell id="ai-criteria" value="✓ AIやAPI機能が中心&#xa;✓ 機械学習・API連携データ&#xa;✓ 簡単な認証のみ&#xa;✓ 機能重視、UI/UXこだわらない" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#4a148c;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="360" y="520" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- ログイン/認証/DB選択基準 -->
+        <mxCell id="auth-db-criteria" value="✓ ログイン・認証・DB機能&#xa;✓ ユーザー・業務データ&#xa;✓ 本格的なユーザー管理&#xa;✓ 本格的なUI/UXが必要" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e8;strokeColor=#2e7d32;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="600" y="520" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- 推奨度アイコン -->
+        <mxCell id="beginner-icon" value="🔰 初心者推奨" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4caf50;strokeColor=#388e3c;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="620" width="200" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="intermediate-icon" value="⚡ 中級者向け" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ff9800;strokeColor=#f57c00;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="620" width="200" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="advanced-icon" value="🚀 上級者向け" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f44336;strokeColor=#d32f2f;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="620" width="200" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- フッター -->
+        <mxCell id="footer" value="最終更新: 2025-07-16 02:21:26 JST | webinarのLiveCodingセミナー用統合ルール" style="text;fontSize=10;fillColor=#f5f5f5;strokeColor=#cccccc;align=center;" vertex="1" parent="1">
+          <mxGeometry x="200" y="680" width="600" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile> 

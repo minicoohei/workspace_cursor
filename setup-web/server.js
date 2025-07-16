@@ -6,6 +6,9 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// 実行中のプロセスを管理
+const runningProcesses = new Map();
+
 // 静的ファイルの提供
 app.use(express.static(__dirname));
 
@@ -15,6 +18,20 @@ app.use(express.json());
 // ヘルスチェックエンドポイント
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// ユーザー入力を送信するエンドポイント
+app.post('/api/send-input', (req, res) => {
+    const { processId, input } = req.body;
+    
+    const child = runningProcesses.get(processId);
+    if (!child) {
+        return res.status(404).json({ error: 'Process not found' });
+    }
+    
+    // プロセスに入力を送信
+    child.stdin.write(input + '\n');
+    res.json({ success: true });
 });
 
 // セットアップスクリプト実行エンドポイント
@@ -39,6 +56,9 @@ app.post('/api/execute-setup', (req, res) => {
         return res.status(404).json({ error: 'Script not found' });
     }
     
+    // プロセスIDを生成
+    const processId = Date.now().toString();
+    
     // レスポンスヘッダーの設定（ストリーミング用）
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Cache-Control', 'no-cache');
@@ -50,12 +70,30 @@ app.post('/api/execute-setup', (req, res) => {
         stdio: ['pipe', 'pipe', 'pipe']
     });
     
+    // プロセスを保存
+    runningProcesses.set(processId, child);
+    
+    // プロセスIDを最初に送信
+    res.write(JSON.stringify({
+        type: 'process_started',
+        processId: processId
+    }) + '\n');
+    
     let stepIndex = 0;
     const steps = getStepsForType(type);
     
     // 標準出力の処理
     child.stdout.on('data', (data) => {
         const output = data.toString();
+        
+        // ユーザー入力を検出
+        if (output.includes('(y/N)') || output.includes('(Y/n)') || output.includes('続行しますか') || output.includes('入力してください')) {
+            res.write(JSON.stringify({
+                type: 'input_required',
+                prompt: output.trim(),
+                processId: processId
+            }) + '\n');
+        }
         
         // 進行状況の判定とステップ更新
         if (shouldAdvanceStep(output, stepIndex, steps)) {
@@ -92,6 +130,9 @@ app.post('/api/execute-setup', (req, res) => {
     
     // プロセス終了時の処理
     child.on('close', (code) => {
+        // プロセスをマップから削除
+        runningProcesses.delete(processId);
+        
         res.write(JSON.stringify({
             type: 'complete',
             code: code,
@@ -102,6 +143,9 @@ app.post('/api/execute-setup', (req, res) => {
     
     // エラーハンドリング
     child.on('error', (error) => {
+        // プロセスをマップから削除
+        runningProcesses.delete(processId);
+        
         res.write(JSON.stringify({
             type: 'error',
             message: `実行エラー: ${error.message}`

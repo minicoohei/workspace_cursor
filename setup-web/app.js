@@ -200,6 +200,8 @@ async function executeSetup(type, steps) {
     
     terminalContent.textContent = `🚀 ${scriptName} を実行中...\n\n`;
     
+    let currentProcessId = null;
+    
     try {
         // サーバーが実行中かチェック
         const serverCheck = await fetch('/api/health').catch(() => null);
@@ -248,6 +250,20 @@ async function executeSetup(type, steps) {
                 if (line.trim()) {
                     try {
                         const data = JSON.parse(line);
+                        
+                        // プロセスIDを保存
+                        if (data.type === 'process_started') {
+                            currentProcessId = data.processId;
+                        }
+                        
+                        // ユーザー入力が必要な場合
+                        if (data.type === 'input_required') {
+                            const userInput = await showInputDialog(data.prompt);
+                            if (userInput !== null && currentProcessId) {
+                                await sendUserInput(currentProcessId, userInput);
+                            }
+                        }
+                        
                         handleSetupProgress(data, steps, currentStepIndex);
                         
                         if (data.type === 'step_complete') {
@@ -336,6 +352,81 @@ function showManualSetupWarning() {
     `;
     
     progressSection.appendChild(warningDiv);
+}
+
+// ユーザー入力ダイアログを表示
+async function showInputDialog(prompt) {
+    return new Promise((resolve) => {
+        // 既存のダイアログがあれば削除
+        const existingDialog = document.getElementById('input-dialog');
+        if (existingDialog) {
+            existingDialog.remove();
+        }
+        
+        // ダイアログHTML作成
+        const dialogHtml = `
+            <div id="input-dialog" class="input-dialog-overlay">
+                <div class="input-dialog">
+                    <h3>入力が必要です</h3>
+                    <p class="input-prompt">${escapeHtml(prompt)}</p>
+                    <div class="input-options">
+                        <button onclick="window.resolveInput('y')" class="btn-yes">はい (Y)</button>
+                        <button onclick="window.resolveInput('n')" class="btn-no">いいえ (N)</button>
+                        <button onclick="window.resolveInput('')" class="btn-skip">スキップ (Enter)</button>
+                    </div>
+                    <div class="input-custom">
+                        <input type="text" id="custom-input" placeholder="カスタム入力" onkeypress="if(event.key==='Enter') window.resolveCustomInput()">
+                        <button onclick="window.resolveCustomInput()">送信</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', dialogHtml);
+        
+        // フォーカスを設定
+        document.getElementById('custom-input').focus();
+        
+        // グローバル関数として定義（一時的）
+        window.resolveInput = (value) => {
+            document.getElementById('input-dialog').remove();
+            delete window.resolveInput;
+            delete window.resolveCustomInput;
+            resolve(value);
+        };
+        
+        window.resolveCustomInput = () => {
+            const value = document.getElementById('custom-input').value;
+            window.resolveInput(value);
+        };
+    });
+}
+
+// サーバーに入力を送信
+async function sendUserInput(processId, input) {
+    try {
+        const response = await fetch('/api/send-input', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ processId, input })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('入力送信エラー:', error);
+        terminalContent.textContent += `\n❌ 入力送信エラー: ${error.message}\n`;
+    }
+}
+
+// HTMLエスケープ関数
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // OS選択ボタンのイベントリスナー
