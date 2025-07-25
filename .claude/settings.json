@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/kou1904/Documents/WorkSpace/work_space/.claude/hooks/bash-safety-check.py",
+            "block_on_exit_codes": [2]
+          }
+        ]
+      }
+    ]
+  }
+}

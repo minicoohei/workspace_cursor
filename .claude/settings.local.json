@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(npx create-next-app:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest init:*)",
+      "Bash(npx shadcn:*)",
+      "Bash(npm test)",
+      "Bash(npm test:*)",
+      "Bash(ls:*)",
+      "Bash(npm run test:coverage:*)",
+      "Bash(npm run dev:*)",
+      "Bash(./scripts/check-dangerous-command.sh:*)",
+      "Bash(./scripts/claude-terminal-wrapper.sh:*)",
+      "Bash(./scripts/setup-safety-hooks.sh:*)",
+      "Bash(gomi:*)",
+      "Bash(lsof:*)"
+    ],
+    "deny": []
+  }
+}

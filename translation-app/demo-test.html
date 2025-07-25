@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>翻訳アプリ Demo Test</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      .container {
+        background: #f5f5f5;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      textarea {
+        width: 100%;
+        height: 100px;
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+      .results {
+        margin-top: 20px;
+      }
+      .result-item {
+        background: white;
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 4px;
+        border-left: 4px solid #007bff;
+      }
+      .result-label {
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 8px;
+      }
+      .loading {
+        color: #666;
+        font-style: italic;
+      }
+      .error {
+        color: #dc3545;
+        background: #f8d7da;
+        border-left-color: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🌟 3段階翻訳アプリ - Demo Test</h1>
+    <p>日本語を「硬い・普通・柔らかい」の3つのトーンで英語翻訳します</p>
+
+    <div class="container">
+      <h2>📝 翻訳テスト</h2>
+      <textarea
+        id="inputText"
+        placeholder="翻訳したい日本語を入力してください..."
+      >
+こんにちは！今日は良い天気ですね。一緒にお茶でも飲みませんか？</textarea
+      >
+      <br />
+      <label for="provider">LLMプロバイダー:</label>
+      <select id="provider">
+        <option value="openai">OpenAI (GPT-4)</option>
+        <option value="claude">Claude (Anthropic)</option>
+      </select>
+      <br /><br />
+      <button onclick="translateText()" id="translateBtn">🚀 翻訳する</button>
+      <button onclick="clearResults()" id="clearBtn">🗑️ クリア</button>
+    </div>
+
+    <div id="results" class="results"></div>
+
+    <div class="container">
+      <h2>🧪 テストケース</h2>
+      <button onclick="runTestCase(1)">テスト1: 日常会話</button>
+      <button onclick="runTestCase(2)">テスト2: ビジネス文書</button>
+      <button onclick="runTestCase(3)">テスト3: 技術文書</button>
+    </div>
+
+    <script>
+      const testCases = {
+        1: "こんにちは！今日は良い天気ですね。一緒にお茶でも飲みませんか？",
+        2: "会議の件でご連絡いたします。来週火曜日の午後2時からの会議室Aでの打ち合わせについて、資料の準備をお願いいたします。",
+        3: "機械学習モデルの精度向上のため、データの前処理とハイパーパラメータの調整を実施し、クロスバリデーションによる評価を行いました。",
+      };
+
+      async function translateText() {
+        const inputText = document.getElementById("inputText").value.trim();
+        const provider = document.getElementById("provider").value;
+        const resultsDiv = document.getElementById("results");
+        const translateBtn = document.getElementById("translateBtn");
+
+        if (!inputText) {
+          alert("翻訳するテキストを入力してください");
+          return;
+        }
+
+        // ボタンを無効化
+        translateBtn.disabled = true;
+        translateBtn.textContent = "🔄 翻訳中...";
+
+        // ローディング表示
+        resultsDiv.innerHTML = `
+                <div class="result-item loading">
+                    <div class="result-label">翻訳中...</div>
+                    <div>処理中です。しばらくお待ちください...</div>
+                </div>
+            `;
+
+        try {
+          const response = await fetch("/api/translate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              text: inputText,
+              provider: provider,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || "翻訳に失敗しました");
+          }
+
+          // 結果表示
+          let resultsHTML = "<h3>✨ 翻訳結果</h3>";
+
+          if (data.demo) {
+            resultsHTML += `<div class="result-item" style="border-left-color: #ffc107; background: #fff3cd;">
+                        <div class="result-label">📢 Demo Mode</div>
+                        <div>${data.message}</div>
+                    </div>`;
+          }
+
+          const toneLabels = {
+            formal: "📄 フォーマル（硬い）",
+            normal: "📋 普通",
+            casual: "💬 カジュアル（柔らかい）",
+          };
+
+          Object.entries(data.translations).forEach(([tone, translation]) => {
+            resultsHTML += `
+                        <div class="result-item">
+                            <div class="result-label">${toneLabels[tone]}</div>
+                            <div>${translation}</div>
+                            <button onclick="copyToClipboard('${translation.replace(
+                              /'/g,
+                              "\\'"
+                            )}')" style="margin-top: 8px; font-size: 12px; padding: 4px 8px;">📋 コピー</button>
+                        </div>
+                    `;
+          });
+
+          resultsDiv.innerHTML = resultsHTML;
+        } catch (error) {
+          console.error("Translation error:", error);
+          resultsDiv.innerHTML = `
+                    <div class="result-item error">
+                        <div class="result-label">❌ エラー</div>
+                        <div>${error.message}</div>
+                    </div>
+                `;
+        } finally {
+          // ボタンを有効化
+          translateBtn.disabled = false;
+          translateBtn.textContent = "🚀 翻訳する";
+        }
+      }
+
+      function clearResults() {
+        document.getElementById("results").innerHTML = "";
+        document.getElementById("inputText").value = "";
+      }
+
+      function runTestCase(testNumber) {
+        document.getElementById("inputText").value = testCases[testNumber];
+        translateText();
+      }
+
+      function copyToClipboard(text) {
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            alert("クリップボードにコピーしました！");
+          })
+          .catch((err) => {
+            console.error("コピーに失敗:", err);
+            alert("コピーに失敗しました");
+          });
+      }
+
+      // エンターキーでの送信対応
+      document
+        .getElementById("inputText")
+        .addEventListener("keydown", function (e) {
+          if (e.key === "Enter" && e.ctrlKey) {
+            translateText();
+          }
+        });
+    </script>
+  </body>
+</html>
